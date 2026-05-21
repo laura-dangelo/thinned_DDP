@@ -19,13 +19,16 @@ tot_datasets = n_datasets * n_ss * length(n_groups)
 trunc = 50
 
 # start loop for importing the data
-for(repl in 1:3) {                            ############### mettere n_datasets
+for(repl in 1:10) {                            ############### mettere n_datasets
   for(i in 1:length(n_groups) ){
     for(j in 1:n_ss){
       
       name_file_open = paste0("01_Simulation_study/data/data_", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
       data = readRDS(file = name_file_open)
       
+      cat(paste0("Replication ", repl, "\n"))
+      cat(paste0("i = ", i, "/", length(n_groups), "\n"))
+      cat(paste0("j = ", j, "/", n_ss, "\n"))
       
       
       #-----#  #-----#  #-----#  #-----#  #-----#

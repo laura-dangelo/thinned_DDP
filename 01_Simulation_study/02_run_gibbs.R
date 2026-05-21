@@ -57,7 +57,9 @@ for(repl in 1:10) {
       sigma2_start[is.na(sigma2_start)] = var(data$y)/3
       
       
-      cat(paste0("Replication ", repl, " \n"))
+      cat(paste0("Replication ", repl, "\n"))
+      cat(paste0("i = ", i, "/", length(n_groups), "\n"))
+      cat(paste0("j = ", j, "/", n_ss, "\n"))
  
 
       #-----#  #-----#  #-----#  #-----#  #-----#
