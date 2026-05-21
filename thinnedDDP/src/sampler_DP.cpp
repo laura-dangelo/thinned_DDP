@@ -1,0 +1,153 @@
+#include "common_functions.h"
+
+// [[Rcpp::export]]
+Rcpp::List sampler_DP_arma(int nrep, // number of replications of the Gibbs sampler
+                            int burnin, // number of replications to discard as burn-in
+                            const arma::vec & y, // input data
+                            int trunc, // maximum number of clusters (truncation)
+                            double mu0, double tau0, // hyperparameters on the N-iG prior on the mean parameter, mu|sigma2 ~ N(mu0, sigma2 / tau0)
+                            double gamma0, double lambda0, // hyperparameters on the N-iG prior on the variance parameter, 1/sigma2 ~ Gamma(gamma0, lambda0)
+                            double alpha, // DP concentration parameter
+                            arma::vec mu_start, 
+                            arma::vec sigma2_start,
+                            arma::vec cl_start,
+                            bool progressbar
+) 
+{
+  /*
+  * Blocked Gibbs sampler for DP mixture of Gaussian kernels
+  */
+    
+  int N = y.n_elem ;
+  
+  // allocate output matrices
+  arma::mat out_mu(trunc, nrep-burnin, arma::fill::zeros) ; // cluster-specific means
+  arma::mat out_sigma2(trunc, nrep-burnin, arma::fill::ones) ; // cluster-specific variances
+  arma::mat out_cl(N, nrep-burnin) ; // cluster allocation of each observation
+  arma::mat out_pi(trunc, nrep-burnin, arma::fill::zeros) ; // cluster allocation probabilities (they are group-specific)
+  arma::vec v_j = Rcpp::rbeta(trunc, 1.0, alpha) ; // beta r.v. of stick-breaking
+  arma::vec log_m1v_j = log(1.0 - v_j) ;
+  
+  // initialization
+  arma::vec tmp_mu = mu_start ;
+  arma::vec tmp_sigma2 = sigma2_start ;
+  arma::vec tmp_cl = cl_start ;
+  arma::vec tmp_pi = stick_breaking( v_j, false ) ;
+  
+  // auxiliary variables
+  arma::vec prob_j(trunc) ;
+  arma::vec ids = arma::linspace(0, trunc-1, trunc) ;
+  
+  int nj ; int nmj ;
+  arma::vec nj_vec(trunc) ;
+  int max_cl ;
+  
+  double a_j = 0.0 ; double b_j = 0.0 ;
+  
+  
+  bool display_progress = progressbar ;
+  Progress p(nrep-burnin, display_progress) ;
+  
+  // START MCMC
+  for(int iter = 0; iter < nrep ; iter++)
+  {
+    if( Progress::check_abort() ) { return -1.0 ; }
+    p.increment();
+    
+    // update sticks
+    a_j = 0 ; b_j = 0 ;
+    
+    for(int j = 0; j < trunc; j++) {
+      arma::uvec ind_j = find(tmp_cl == j) ;
+      arma::uvec ind_mj = find(tmp_cl > j) ;
+      
+      nj = ind_j.n_elem ;
+      nmj = ind_mj.n_elem ;
+      
+      a_j = 1.0 + nj ;
+      b_j = alpha + nmj ;
+      v_j(j) = R::rbeta(a_j, b_j) ;
+    }
+    
+    // reconstruct the mixing weights based on sticks
+    for(int j = 0; j < trunc; j++) {
+      tmp_pi = stick_breaking( v_j , false );
+    }
+
+    
+    // update cluster allocation
+    for(int i = 0; i < N; i++)
+    {
+      prob_j.fill(log(0.0)) ;
+      
+      for(int j = 0; j < trunc; j++) {
+        prob_j(j) = R::dnorm( y(i), tmp_mu(j), std::sqrt(tmp_sigma2(j)), true ) + 
+          log(tmp_pi(j)) ;
+      }
+      prob_j =  prob_j - max(prob_j) ;
+      prob_j = exp(prob_j) ;
+      tmp_cl(i) = sample_i(ids, prob_j) ;
+    }
+  
+    
+    // update model parameters
+    double new_mu0 ; double new_tau0 ;
+    double new_gamma0; double new_lambda0 ;
+    
+    nj_vec.fill(0) ;
+    for(int j = 0; j < trunc ; j++)
+    {
+      arma::uvec cl_j = find( tmp_cl == j ) ;
+      nj_vec(j) = cl_j.n_elem ;
+      
+      if( nj_vec(j) > 0) {
+        
+        double sumcl_j = arma::accu( y(cl_j) ); // sum of y_i
+        
+        // new parameters
+        new_tau0 = tau0 + nj_vec(j) ;
+        new_mu0 = (tau0 * mu0 + sumcl_j)/new_tau0 ;
+        new_gamma0 = gamma0 + nj_vec(j) / 2.0 ;
+        new_lambda0 = lambda0 + 0.5 * ( (nj_vec(j)-1.0)*arma::var(y(cl_j)) + 
+                                          (tau0*nj_vec(j))/new_tau0 * (sumcl_j/nj_vec(j) - mu0) * (sumcl_j/nj_vec(j) - mu0)  ) ;
+        
+        tmp_sigma2(j) = 1.0/R::rgamma( new_gamma0, 1.0/new_lambda0) ;
+        tmp_mu(j) = R::rnorm( new_mu0, sqrt(tmp_sigma2(j)/new_tau0) ) ;
+        
+      } else {
+        tmp_sigma2(j) = 1.0/R::rgamma(gamma0, 1.0/lambda0) ;
+        tmp_mu(j) = R::rnorm( mu0, sqrt(tmp_sigma2(j)/tau0) )  ;
+      }
+    }
+    
+    if(iter >= burnin) {
+      out_mu.col(iter - burnin) = tmp_mu ;
+      out_sigma2.col(iter - burnin) = tmp_sigma2 ;
+      out_cl.col(iter - burnin) = tmp_cl ;
+      out_pi.col(iter - burnin) = tmp_pi ;
+    }
+    
+    //// END 
+  }
+  
+  arma::vec hyperpar(4) ;
+  hyperpar(0) = mu0 ; hyperpar(1) = tau0 ; 
+  hyperpar(2) = gamma0 ; hyperpar(3) = lambda0 ; 
+  
+  return Rcpp::List::create(Rcpp::Named("mu") = out_mu.t(),
+                            Rcpp::Named("sigma2") = out_sigma2.t(),
+                            Rcpp::Named("cl") = out_cl.t(),
+                            Rcpp::Named("pi") = out_pi.t(),
+                            Rcpp::Named("y") = y,
+                            Rcpp::Named("nrep") = nrep,
+                            Rcpp::Named("burnin") = burnin,
+                            Rcpp::Named("trunc") = trunc,
+                            Rcpp::Named("hyperpar") = hyperpar,
+                            Rcpp::Named("alpha") = alpha,
+                            Rcpp::Named("mu_start") = mu_start,
+                            Rcpp::Named("sigma2_start") = sigma2_start,
+                            Rcpp::Named("cl_start") = cl_start
+                            
+  );
+}
+
