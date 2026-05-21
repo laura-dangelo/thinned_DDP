@@ -2,7 +2,7 @@
 #             ESTIMATE CLUSTER AND DENSITY             #
 #----------------# #----------------# #----------------# 
 
-# This script takes as input the fitted models and estimates the partition and posterior group-specific densities.
+# This script takes as input the MCMC runs and estimates the partition and posterior group-specific densities.
 # The results are then saved into the 01_Simulation_study/results folder.
 
 
@@ -16,10 +16,10 @@ ssg = c(10, 30)
 n_ss = 4 # number of different configuration of sample size
 n_datasets = 50
 tot_datasets = n_datasets * n_ss * length(n_groups)
-
+trunc = 50
 
 # start loop for importing the data
-for(repl in 1:50) {
+for(repl in 1:3) {                            ############### mettere n_datasets
   for(i in 1:length(n_groups) ){
     for(j in 1:n_ss){
       
@@ -111,6 +111,7 @@ for(repl in 1:50) {
       #-----#  #-----#  #-----#  #-----#
       #-----#       NO POOL      #-----#
       #-----#  #-----#  #-----#  #-----#
+      
       nameopen = paste0("01_Simulation_study/results/run_nopool", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
       run_gibbs_nopool = readRDS(file = nameopen)
       
