@@ -1,0 +1,126 @@
+[
+    {
+        "file": "C:/Users/LD078271/Documents/GitHub/thinned_DDP/thinnedDDP/src/common_functions.cpp",
+        "file_last_write": 1779363588.0,
+        "definitions": [
+            {
+                "usr": "c:@F@sample_i#$@N@arma@S@Col>#d#S0_#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "sample_i(arma::vec, arma::vec)",
+                "file": "C:/Users/LD078271/Documents/GitHub/thinned_DDP/thinnedDDP/src/common_functions.cpp",
+                "line": 7,
+                "column": 5,
+                "hidden": false
+            },
+            {
+                "usr": "c:@F@stick_breaking#$@N@arma@S@Col>#d#b#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "stick_breaking(arma::vec, bool)",
+                "file": "C:/Users/LD078271/Documents/GitHub/thinned_DDP/thinnedDDP/src/common_functions.cpp",
+                "line": 15,
+                "column": 11,
+                "hidden": false
+            },
+            {
+                "usr": "c:@F@rmvnorm#$@N@arma@S@Col>#d#$@N@arma@S@Mat>#d#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "rmvnorm(arma::vec, arma::mat)",
+                "file": "C:/Users/LD078271/Documents/GitHub/thinned_DDP/thinnedDDP/src/common_functions.cpp",
+                "line": 33,
+                "column": 11,
+                "hidden": false
+            }
+        ],
+        "hidden": false
+    },
+    {
+        "file": "C:/Users/LD078271/Documents/GitHub/thinned_DDP/thinnedDDP/src/common_functions.h",
+        "file_last_write": 1779363588.0,
+        "definitions": [],
+        "hidden": false
+    },
+    {
+        "file": "C:/Users/LD078271/Documents/GitHub/thinned_DDP/thinnedDDP/src/compute_density.cpp",
+        "file_last_write": 1779366321.0,
+        "definitions": [
+            {
+                "usr": "c:@F@compute_density_1iter#$@N@arma@S@Col>#d#$@N@arma@S@Mat>#d#S0_#S0_#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "compute_density_1iter(arma::vec, arma::mat, arma::vec, arma::vec)",
+                "file": "C:/Users/LD078271/Documents/GitHub/thinned_DDP/thinnedDDP/src/compute_density.cpp",
+                "line": 4,
+                "column": 11,
+                "hidden": false
+            },
+            {
+                "usr": "c:@F@compute_density#$@N@arma@S@Col>#d#$@N@arma@S@Cube>#d#$@N@arma@S@Mat>#d#S2_#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "compute_density(arma::vec, arma::cube, arma::mat, arma::mat)",
+                "file": "C:/Users/LD078271/Documents/GitHub/thinned_DDP/thinnedDDP/src/compute_density.cpp",
+                "line": 34,
+                "column": 12,
+                "hidden": false
+            },
+            {
+                "usr": "c:@F@compute_density_1iter1DP#$@N@arma@S@Col>#d#S0_#S0_#S0_#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "compute_density_1iter1DP(arma::vec, arma::vec, arma::vec, arma::vec)",
+                "file": "C:/Users/LD078271/Documents/GitHub/thinned_DDP/thinnedDDP/src/compute_density.cpp",
+                "line": 72,
+                "column": 11,
+                "hidden": false
+            },
+            {
+                "usr": "c:@F@compute_density_1DP#$@N@arma@S@Col>#d#$@N@arma@S@Mat>#d#S1_#S1_#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "compute_density_1DP(arma::vec, arma::mat, arma::mat, arma::mat)",
+                "file": "C:/Users/LD078271/Documents/GitHub/thinned_DDP/thinnedDDP/src/compute_density.cpp",
+                "line": 99,
+                "column": 12,
+                "hidden": false
+            }
+        ],
+        "hidden": false
+    },
+    {
+        "file": "C:/Users/LD078271/Documents/GitHub/thinned_DDP/thinnedDDP/src/sampler_DP.cpp",
+        "file_last_write": 1779367055.0,
+        "definitions": [
+            {
+                "usr": "c:@F@sampler_DP_arma#I#I#&1$@N@arma@S@Col>#d#I#d#d#d#d#d#S1_#S1_#S1_#b#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "sampler_DP_arma(int, int, const arma::vec &, int, double, double, double, double, double, arma::vec, arma::vec, arma::vec, bool)",
+                "file": "C:/Users/LD078271/Documents/GitHub/thinned_DDP/thinnedDDP/src/sampler_DP.cpp",
+                "line": 4,
+                "column": 12,
+                "hidden": false
+            }
+        ],
+        "hidden": false
+    },
+    {
+        "file": "C:/Users/LD078271/Documents/GitHub/thinned_DDP/thinnedDDP/src/sampler_thinnedDDP.cpp",
+        "file_last_write": 1779367046.0,
+        "definitions": [
+            {
+                "usr": "c:@F@sampler_thinnedDDP_arma#I#I#&1$@N@arma@S@Col>#d#S0_#I#d#d#d#d#d#d#d#S1_#S1_#S1_#b#",
+                "kind": 6,
+                "parent_name": "",
+                "name": "sampler_thinnedDDP_arma(int, int, const arma::vec &, const arma::vec &, int, double, double, double, double, double, double, double, arma::vec, arma::vec, arma::vec, bool)",
+                "file": "C:/Users/LD078271/Documents/GitHub/thinned_DDP/thinnedDDP/src/sampler_thinnedDDP.cpp",
+                "line": 4,
+                "column": 12,
+                "hidden": false
+            }
+        ],
+        "hidden": false
+    }
+]

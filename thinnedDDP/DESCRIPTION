@@ -7,7 +7,7 @@ Author: Laura D'Angelo
 Maintainer: Laura D'Angelo <laura.dangelo@unimib.it>
 Description: The package implements the blocked Gibbs sampler for fitting the thinned dependent Dirichlet process (thinned-DDP) of D'Angelo, Nipoti and Ongaro (2026, https://arxiv.org/abs/2506.18223) to grouped data.
 License:  MIT 
-Imports: Rcpp (>= 1.1.0)
+Imports: Rcpp
 LinkingTo: Rcpp, RcppArmadillo, RcppProgress
 RoxygenNote: 7.3.2
 Encoding: UTF-8

@@ -46,7 +46,6 @@ Rcpp::List compute_density(arma::vec grid,
   if(weights.n_slices != variances.n_cols) {Rcpp::Rcout << "number of cols weights != variances" ;}
   if(variances.n_cols != means.n_cols) {Rcpp::Rcout << "number of cols variances != means" ;}
   
-  int trunc = means.n_rows ;
   int G = weights.n_cols ;
   int nrep = weights.n_slices ;
   int n_points = grid.n_elem ;
@@ -112,7 +111,6 @@ Rcpp::List compute_density_1DP(arma::vec grid,
   if(weights.n_cols != variances.n_cols) {Rcpp::Rcout << "number of cols weights != variances" ;}
   if(variances.n_cols != means.n_cols) {Rcpp::Rcout << "number of cols variances != means" ;}
   
-  int trunc = means.n_rows ;
   int nrep = weights.n_cols ;
   int n_points = grid.n_elem ;
   

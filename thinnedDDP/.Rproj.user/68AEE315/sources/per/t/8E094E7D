@@ -1,0 +1,26 @@
+{
+    "id": "8E094E7D",
+    "path": "~/GitHub/thinned_DDP/thinnedDDP/src/sampler_DP.cpp",
+    "project_path": "src/sampler_DP.cpp",
+    "type": "cpp",
+    "hash": "3704851916",
+    "contents": "",
+    "dirty": false,
+    "created": 1779366347954.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "47,17",
+        "scrollLine": "34"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1779367055,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1779367055850,
+    "read_only": false,
+    "read_only_alternatives": []
+}
