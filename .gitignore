@@ -1,0 +1,6 @@
+*.Rdata
+*.RData
+*.RDS
+.RDS
+.Rdata
+.RData
