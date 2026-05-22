@@ -1,3 +1,8 @@
+
+#----------------# #----------------# #----------------# 
+#                  PLOT COMPUTING TIME                 #
+#----------------# #----------------# #----------------# 
+
 library(devtools)
 library(salso)
 library(mclust)
@@ -20,32 +25,20 @@ for(repl in 1:n_datasets) {
   for(i in 1:length(n_groups) ){
     for(j in 1:n_ss){
       
-      nameopen = paste0("../04_Simulation_commonatoms/Results/time_thinnedDDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".Rdata")
-      load(nameopen)
-      newdata = c("thinnedDDP", n_groups[i], sum(n_groups[i]/2*ssg*j), time_thinnedDDP)
+      nameopen = paste0("01_Simulation_study/results/time_thinnedDDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
+      time_thinnedDDP = readRDS(nameopen)
+      newdata = c("Thinned DDP", n_groups[i], sum(n_groups[i]/2*ssg*j), time_thinnedDDP)
       time_df[nrow(time_df)+1,] = newdata
+
       
-      
-      # nameopen = paste0("../04_Simulation_commonatoms/Results/time_pool", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".Rdata")
-      # load(nameopen)
-      # newdata = c("pool", n_groups[i], sum(n_groups[i]/2*ssg*j), time_pool)
-      # time_df[nrow(time_df)+1,] = newdata
-      # 
-      # 
-      # nameopen = paste0("../04_Simulation_commonatoms/Results/time_nopool", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".Rdata")
-      # load(nameopen)
-      # newdata = c("no-pool", n_groups[i], sum(n_groups[i]/2*ssg*j), time_nopool)
-      # time_df[nrow(time_df)+1,] = newdata
-      
-      
-      nameopen = paste0("../04_Simulation_commonatoms/Results/time_CAM", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".Rdata")
-      load(nameopen)
+      nameopen = paste0("01_Simulation_study/results/time_CAM", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
+      time_CAM = readRDS(nameopen)
       newdata = c("CAM", n_groups[i], sum(n_groups[i]/2*ssg*j), time_CAM)
       time_df[nrow(time_df)+1,] = newdata
       
       
-      nameopen = paste0("../04_Simulation_commonatoms/Results/time_gmDDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".Rdata")
-      load(nameopen)
+      nameopen = paste0("01_Simulation_study/results/time_gmDDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
+      time_gmDDP = readRDS(nameopen)
       newdata = c("GM-DDP", n_groups[i], sum(n_groups[i]/2*ssg*j), time_gmDDP)
       time_df[nrow(time_df)+1,] = newdata
       
@@ -91,7 +84,7 @@ ggplot(time_df, aes(x = n, y = log(time), fill=Model ) ) +
   ylab("log(time)")+
   facet_wrap( ~ G, scales = "free",
               labeller = labeller(G = c("2" = "2 groups",
-                                        "10" = "10 goups") )
+                                        "10" = "10 groups") )
   )
 
-ggsave("../04_Simulation_commonatoms/08_02_time.pdf", width = 8, height = 4)
+ggsave("01_Simulation_study/output_images/08_02_time.pdf", width = 8, height = 4)

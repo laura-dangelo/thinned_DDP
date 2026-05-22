@@ -10,7 +10,7 @@
 # - CAM (from the SANple package)
 # - GM-DDP (from the BNPmix package)
 
-# The results are then saved into the 01_Simulation_study/results folder.
+# The results are then saved into the "01_Simulation_study/results" folder.
 
 library(SANple)
 library(BNPmix)
@@ -26,7 +26,7 @@ tot_datasets = n_datasets * n_ss * length(n_groups)
 
 
 # start loop for fitting the models
-for(repl in 1:10) {
+for(repl in 1:n_datasets) {
   for(i in 1:length(n_groups) ){
     for(j in 1:n_ss){
       
@@ -34,8 +34,8 @@ for(repl in 1:10) {
       data = readRDS(file = name_file_open)
       
       # set number of iterations
-      nrep = 6000
-      burnin = (floor(nrep/3*2))
+      nrep = 10000
+      burnin = (floor(nrep/10*3))
       
       # define hyperparameters
       tau0 = 0.01

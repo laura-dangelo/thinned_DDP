@@ -3,7 +3,7 @@
 #----------------# #----------------# #----------------# 
 
 # This script takes as input the MCMC runs and estimates the partition and posterior group-specific densities.
-# The results are then saved into the 01_Simulation_study/results folder.
+# The results are then saved into the "01_Simulation_study/results" folder.
 
 
 library(salso)
@@ -19,7 +19,7 @@ tot_datasets = n_datasets * n_ss * length(n_groups)
 trunc = 50
 
 # start loop for importing the data
-for(repl in 1:10) {                            ############### mettere n_datasets
+for(repl in 1:n_datasets) {                            
   for(i in 1:length(n_groups) ){
     for(j in 1:n_ss){
       
