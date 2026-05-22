@@ -35,7 +35,7 @@ for(repl in 1:n_datasets) {
       
       # set number of iterations
       nrep = 10000
-      burnin = (floor(nrep/10*3))
+      burnin = (floor(nrep/2))
       
       # define hyperparameters
       tau0 = 0.01
