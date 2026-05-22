@@ -70,9 +70,10 @@ for(repl in 1:3) {                            ############### mettere n_datasets
       
       
       
-      #-----#  #-----#  #-----#  #-----#
-      #-----#       POOLING      #-----#
-      #-----#  #-----#  #-----#  #-----#
+      #-----#  #-----#  #-----#  #-----#  #-----#
+      #-----#       COMPLETE POOLING      #-----#
+      #-----#  #-----#  #-----#  #-----#  #-----#
+      
       nameopen = paste0("01_Simulation_study/results/run_pool", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
       run_gibbs_pool = readRDS(file = nameopen)
           

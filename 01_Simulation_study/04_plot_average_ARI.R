@@ -12,43 +12,43 @@ n_datasets = 50
 
 tot_datasets = n_datasets * n_ss * length(n_groups)
 
-# rand_df = data.frame("Model" = character(), "G" = numeric(), "n" = numeric(), "rand" = double())
-# 
-# for(repl in 1:n_datasets) {
-#   for(i in 1:length(n_groups) ){
-#     for(j in 1:n_ss){
-# 
-#       nameopen = paste0("../04_Simulation_commonatoms/Results/average_rand_thinnedDDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".Rdata")
-#       load(nameopen)
-#       newdata = c("thinnedDDP", n_groups[i], sum(n_groups[i]/2*ssg*j), average_rand_thinnedDDP)
-#       rand_df[nrow(rand_df)+1,] = newdata
-# 
-#       nameopen = paste0("../04_Simulation_commonatoms/Results/average_rand_CAM", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".Rdata")
-#       load(nameopen)
-#       newdata = c("CAM", n_groups[i], sum(n_groups[i]/2*ssg*j), average_rand_CAM)
-#       rand_df[nrow(rand_df)+1,] = newdata
-# 
-#       nameopen = paste0("../04_Simulation_commonatoms/Results/average_rand_gmDDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".Rdata")
-#       load(nameopen)
-#       newdata = c("GM-DDP", n_groups[i], sum(n_groups[i]/2*ssg*j), average_rand_gmDDP)
-#       rand_df[nrow(rand_df)+1,] = newdata
-# 
-#     }
-#   }
-# }
-# str(rand_df)
-# 
-# rand_df$n = as.numeric(rand_df$n)
-# rand_df$G = as.numeric(rand_df$G)
-# rand_df$rand = as.numeric(rand_df$rand)
-# 
-# rand_df = rand_df[order(rand_df$Model, rand_df$G, rand_df$n), ]
-# 
-# rand_df$n = as.factor(rand_df$n)
-# rand_df$G = as.factor(rand_df$G)
-# rand_df$Model = as.factor(rand_df$Model)
-# 
-# saveRDS(rand_df, file = "../04_Simulation_commonatoms/output_RDS/AARI_df_models.RDS")
+rand_df = data.frame("Model" = character(), "G" = numeric(), "n" = numeric(), "rand" = double())
+
+for(repl in 1:n_datasets) {
+  for(i in 1:length(n_groups) ){
+    for(j in 1:n_ss){
+
+      nameopen = paste0("../04_Simulation_commonatoms/Results/average_rand_thinnedDDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".Rdata")
+      load(nameopen)
+      newdata = c("thinnedDDP", n_groups[i], sum(n_groups[i]/2*ssg*j), average_rand_thinnedDDP)
+      rand_df[nrow(rand_df)+1,] = newdata
+
+      nameopen = paste0("../04_Simulation_commonatoms/Results/average_rand_CAM", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".Rdata")
+      load(nameopen)
+      newdata = c("CAM", n_groups[i], sum(n_groups[i]/2*ssg*j), average_rand_CAM)
+      rand_df[nrow(rand_df)+1,] = newdata
+
+      nameopen = paste0("../04_Simulation_commonatoms/Results/average_rand_gmDDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".Rdata")
+      load(nameopen)
+      newdata = c("GM-DDP", n_groups[i], sum(n_groups[i]/2*ssg*j), average_rand_gmDDP)
+      rand_df[nrow(rand_df)+1,] = newdata
+
+    }
+  }
+}
+str(rand_df)
+
+rand_df$n = as.numeric(rand_df$n)
+rand_df$G = as.numeric(rand_df$G)
+rand_df$rand = as.numeric(rand_df$rand)
+
+rand_df = rand_df[order(rand_df$Model, rand_df$G, rand_df$n), ]
+
+rand_df$n = as.factor(rand_df$n)
+rand_df$G = as.factor(rand_df$G)
+rand_df$Model = as.factor(rand_df$Model)
+
+saveRDS(rand_df, file = "../04_Simulation_commonatoms/output_RDS/AARI_df_models.RDS")
 
 rand_df = readRDS("../04_Simulation_commonatoms/output_RDS/AARI_df_models.RDS")
 
