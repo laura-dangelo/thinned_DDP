@@ -2,11 +2,11 @@
 #                GENERATE SYNTHETIC DATA               #
 #----------------# #----------------# #----------------# 
 
-# This script generate the synthetic data used in the simulation study.
+# This script generates the synthetic data used in the simulation study.
 # The data are organized into G groups, with G = 2, 10.
 # They are generated from group-specific mixtures of Gaussian kernels.
 
-# The simulated data are then saved in the 01_Simulation_study/data folder.
+# The simulated data are then saved in the "01_Simulation_study/data" folder.
 
 
 source("01_Simulation_study/auxiliary_functions/00_sim_mixN_thinned.R")

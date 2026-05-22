@@ -19,12 +19,13 @@ Rcpp::List sampler_DP_arma(int nrep, // number of replications of the Gibbs samp
   */
     
   int N = y.n_elem ;
+  int iter_thin = 0 ;
   
   // allocate output matrices
-  arma::mat out_mu(trunc, nrep-burnin, arma::fill::zeros) ; // cluster-specific means
-  arma::mat out_sigma2(trunc, nrep-burnin, arma::fill::ones) ; // cluster-specific variances
-  arma::mat out_cl(N, nrep-burnin) ; // cluster allocation of each observation
-  arma::mat out_pi(trunc, nrep-burnin, arma::fill::zeros) ; // cluster allocation probabilities (they are group-specific)
+  arma::mat out_mu(trunc, (nrep-burnin)/2, arma::fill::zeros) ; // cluster-specific means
+  arma::mat out_sigma2(trunc, (nrep-burnin)/2, arma::fill::ones) ; // cluster-specific variances
+  arma::mat out_cl(N, (nrep-burnin)/2) ; // cluster allocation of each observation
+  arma::mat out_pi(trunc, (nrep-burnin)/2, arma::fill::zeros) ; // cluster allocation probabilities (they are group-specific)
   arma::vec v_j = Rcpp::rbeta(trunc, 1.0, alpha) ; // beta r.v. of stick-breaking
   arma::vec log_m1v_j = log(1.0 - v_j) ;
   
@@ -119,11 +120,12 @@ Rcpp::List sampler_DP_arma(int nrep, // number of replications of the Gibbs samp
       }
     }
     
-    if(iter >= burnin) {
-      out_mu.col(iter - burnin) = tmp_mu ;
-      out_sigma2.col(iter - burnin) = tmp_sigma2 ;
-      out_cl.col(iter - burnin) = tmp_cl ;
-      out_pi.col(iter - burnin) = tmp_pi ;
+    if((iter >= burnin) & (iter % 2 == 0)) {
+      out_mu.col(iter_thin) = tmp_mu ;
+      out_sigma2.col(iter_thin) = tmp_sigma2 ;
+      out_cl.col(iter_thin) = tmp_cl ;
+      out_pi.col(iter_thin) = tmp_pi ;
+      iter_thin = iter_thin + 1 ;
     }
     
     //// END 

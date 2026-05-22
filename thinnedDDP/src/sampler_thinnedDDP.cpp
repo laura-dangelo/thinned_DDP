@@ -25,15 +25,15 @@ Rcpp::List sampler_thinnedDDP_arma(int nrep, // number of replications of the Gi
   int G = unique_groups.n_elem ;
   
   // allocate output matrices
-  arma::mat out_mu(trunc, nrep-burnin, arma::fill::zeros) ; // cluster-specific means
-  arma::mat out_sigma2(trunc, nrep-burnin, arma::fill::ones) ; // cluster-specific variances
-  arma::mat out_cl(N, nrep-burnin) ; // cluster allocation of each observation
-  arma::cube out_pi(trunc, G, nrep-burnin, arma::fill::zeros) ; // group-specific cluster allocation probabilities
+  arma::mat out_mu(trunc, (nrep-burnin)/2, arma::fill::zeros) ; // cluster-specific means
+  arma::mat out_sigma2(trunc, (nrep-burnin)/2, arma::fill::ones) ; // cluster-specific variances
+  arma::mat out_cl(N, (nrep-burnin)/2) ; // cluster allocation of each observation
+  arma::cube out_pi(trunc, G, (nrep-burnin)/2, arma::fill::zeros) ; // group-specific cluster allocation probabilities
   arma::vec v_j = Rcpp::rbeta(trunc, 1.0, alpha) ; // beta r.v. of stick-breaking
   arma::vec thinned_vj = v_j ;
   arma::vec log_m1v_j = log(1.0 - v_j) ;
-  arma::cube out_ell(trunc, G, nrep-burnin, arma::fill::ones) ; // thinning variables ell_j
-  arma::mat out_prob_thinning(G, nrep-burnin, arma::fill::zeros) ; // group-specific thinning probabilities
+  arma::cube out_ell(trunc, G, (nrep-burnin)/2, arma::fill::ones) ; // thinning variables ell_j
+  arma::mat out_prob_thinning(G, (nrep-burnin)/2, arma::fill::zeros) ; // group-specific thinning probabilities
   
   double p1 ; 
   double log_p1 ; double log_p0 ;
@@ -68,7 +68,7 @@ Rcpp::List sampler_thinnedDDP_arma(int nrep, // number of replications of the Gi
   arma::vec tmp_nm_ell(G) ;
   double tmp_sum_ell = 0.0 ; 
   
-
+  int iter_thin = 0 ;
     
   // progress bar 
   bool display_progress = progressbar ;
@@ -187,13 +187,14 @@ Rcpp::List sampler_thinnedDDP_arma(int nrep, // number of replications of the Gi
       }
     }
     
-    if(iter >= burnin) {
-      out_mu.col(iter - burnin) = tmp_mu ;
-      out_sigma2.col(iter - burnin) = tmp_sigma2 ;
-      out_cl.col(iter - burnin) = tmp_cl ;
-      out_pi.slice(iter - burnin) = tmp_pi ;
-      out_ell.slice(iter - burnin) = tmp_ell ;
-      out_prob_thinning.col(iter - burnin) = tmp_prob_thinning ;
+    if((iter >= burnin) & (iter % 2 == 0)) {
+      out_mu.col(iter_thin) = tmp_mu ;
+      out_sigma2.col(iter_thin) = tmp_sigma2 ;
+      out_cl.col(iter_thin) = tmp_cl ;
+      out_pi.slice(iter_thin) = tmp_pi ;
+      out_ell.slice(iter_thin) = tmp_ell ;
+      out_prob_thinning.col(iter_thin) = tmp_prob_thinning ;
+      iter_thin = iter_thin + 1 ;
     }
     
     //// END 

@@ -9,21 +9,22 @@ tot_datasets = n_datasets * n_ss * length(n_groups)
 
 
 
-for(repl in 31:n_datasets) {
+for(repl in 1:n_datasets) {
   for(i in 1:length(n_groups) ){
     for(j in 1:n_ss){ 
       
-      name_file_open = paste0("../04_Simulation_commonatoms/Data/data_", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".Rdata")
-      load(file = name_file_open)
+      name_file_open = paste0("01_Simulation_study/data/data_", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
+      data = readRDS(file = name_file_open)
       
-      nameopen = paste0("../04_Simulation_commonatoms/Results/true_density_", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".Rdata")
-      load(nameopen)
+      nameopen = paste0("01_Simulation_study/results/true_density_", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
+      truth = readRDS(nameopen)
       
       #-----# #-----# #-----# #-----#
       #-----#   Thinned DDP   #-----#
       #-----# #-----# #-----# #-----# 
-      nameopen = paste0("../04_Simulation_commonatoms/Results/density_est_thinnedDDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".Rdata")
-      load(nameopen)
+      
+      nameopen = paste0("01_Simulation_study/results/density_est_thinnedDDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
+      density_est_thinnedDDP = readRDS(nameopen)
       
       seqq = density_est_thinnedDDP$seq
       density_CI_thinnedDDP = matrix(rep(1,length(seqq)), length(seqq), 1)
@@ -49,8 +50,8 @@ for(repl in 31:n_datasets) {
       density_CI_thinnedDDP = data.frame(density_CI_thinnedDDP)
       colnames(density_CI_thinnedDDP) = c("Group", "Seq", "lower", "mean", "upper", "true")
       
-      namesave = paste0("../04_Simulation_commonatoms/Results/density_CI_thinnedDDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".Rdata")
-      save(density_CI_thinnedDDP, file = namesave)
+      namesave = paste0("01_Simulation_study/results/density_CI_thinnedDDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
+      saveRDS(density_CI_thinnedDDP, file = namesave)
       
       rm(density_CI_thinnedDDP)
       rm(density_est_thinnedDDP)
@@ -60,8 +61,8 @@ for(repl in 31:n_datasets) {
       #-----#      Pool       #-----#
       #-----# #-----# #-----# #-----#
 
-      nameopen = paste0("../04_Simulation_commonatoms/Results/density_est_pool", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".Rdata")
-      load(nameopen)
+      nameopen = paste0("01_Simulation_study/results/density_est_pool", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
+      density_est_pool = readRDS(nameopen)
 
       density_CI_pool = matrix(seqq, length(seqq), 1)
       density_CI_pool = cbind(density_CI_pool, apply(density_est_pool$density_mcmc, 1, function(x) emp.hpd(x)[[1]] ))
@@ -71,8 +72,8 @@ for(repl in 31:n_datasets) {
       density_CI_pool = data.frame(density_CI_pool)
       colnames(density_CI_pool) = c("Seq", "lower", "mean", "upper")
 
-      namesave = paste0("../04_Simulation_commonatoms/Results/density_CI_pool", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".Rdata")
-      save(density_CI_pool, file = namesave)
+      namesave = paste0("01_Simulation_study/results/density_CI_pool", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
+      saveRDS(density_CI_pool, file = namesave)
 
       rm(density_CI_pool)
       rm(density_est_pool)
@@ -82,8 +83,8 @@ for(repl in 31:n_datasets) {
       #-----#     No pool     #-----#
       #-----# #-----# #-----# #-----#
 
-      nameopen = paste0("../04_Simulation_commonatoms/Results/density_est_nopool", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".Rdata")
-      load(nameopen)
+      nameopen = paste0("01_Simulation_study/results/density_est_nopool", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
+      density_est_nopool = readRDS(nameopen)
 
       density_CI_nopool = matrix(rep(1,length(seqq)), length(seqq), 1)
       density_CI_nopool = cbind(density_CI_nopool, seqq)
@@ -105,8 +106,8 @@ for(repl in 31:n_datasets) {
       density_CI_nopool = data.frame(density_CI_nopool)
       colnames(density_CI_nopool) = c("Group", "Seq", "lower", "mean", "upper")
 
-      namesave = paste0("../04_Simulation_commonatoms/Results/density_CI_nopool", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".Rdata")
-      save(density_CI_nopool, file = namesave)
+      namesave = paste0("01_Simulation_study/results/density_CI_nopool", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
+      saveRDS(density_CI_nopool, file = namesave)
 
       rm(density_CI_nopool)
       rm(density_est_nopool)
@@ -117,8 +118,9 @@ for(repl in 31:n_datasets) {
       #-----# #-----# #-----# #-----#
       #-----#       CAM       #-----#
       #-----# #-----# #-----# #-----# 
-      nameopen = paste0("../04_Simulation_commonatoms/Results/density_est_CAM", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".Rdata")
-      load(nameopen)
+      
+      nameopen = paste0("01_Simulation_study/results/density_est_CAM", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
+      density_est_CAM = readRDS(nameopen)
       
       seqq = density_est_CAM$seq
       density_CI_CAM = matrix(rep(1,length(seqq)), length(seqq), 1)
@@ -144,8 +146,8 @@ for(repl in 31:n_datasets) {
       density_CI_CAM = data.frame(density_CI_CAM)
       colnames(density_CI_CAM) = c("Group", "Seq", "lower", "mean", "upper", "true")
       
-      namesave = paste0("../04_Simulation_commonatoms/Results/density_CI_CAM", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".Rdata")
-      save(density_CI_CAM, file = namesave)
+      namesave = paste0("01_Simulation_study/results/density_CI_CAM", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
+      saveRDS(density_CI_CAM, file = namesave)
       
       rm(density_CI_CAM)
       rm(density_est_CAM)
@@ -157,8 +159,9 @@ for(repl in 31:n_datasets) {
       #-----# #-----# #-----# #-----#
       #-----#      GM-DDP     #-----#
       #-----# #-----# #-----# #-----# 
-      nameopen = paste0("../04_Simulation_commonatoms/Results/density_est_gmDDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".Rdata")
-      load(nameopen)
+      
+      nameopen = paste0("01_Simulation_study/results/density_est_gmDDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
+      density_est_gmDDP = readRDS(nameopen)
       
       seqq = density_est_gmDDP$seq
       density_CI_gmDDP = matrix(rep(1,length(seqq)), length(seqq), 1)
@@ -184,8 +187,8 @@ for(repl in 31:n_datasets) {
       density_CI_gmDDP = data.frame(density_CI_gmDDP)
       colnames(density_CI_gmDDP) = c("Group", "Seq", "lower", "mean", "upper", "true")
       
-      namesave = paste0("../04_Simulation_commonatoms/Results/density_CI_gmDDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".Rdata")
-      save(density_CI_gmDDP, file = namesave)
+      namesave = paste0("01_Simulation_study/results/density_CI_gmDDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
+      saveRDS(density_CI_gmDDP, file = namesave)
       
       rm(density_CI_gmDDP)
       rm(density_est_gmDDP)
