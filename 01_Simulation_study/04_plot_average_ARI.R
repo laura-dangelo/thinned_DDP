@@ -90,8 +90,8 @@ ggplot(rand_df2, aes(x = n, y = rand, fill=Model ) ) +
   # scale_fill_manual( values = c(rocket(8)[4], mako(8)[5], inferno(8)[7]) ) +
   scale_fill_manual( values = c("forestgreen", "royalblue3", "deeppink4" ) ) +
   xlab("Sample size")  +
-  ylab("ARI")+
-  ylim(min(rand_df2$rand),1)+
+  ylim(0,1) +
+  ylab("Average ARI")+
   facet_wrap( ~ G, scales = "free",
               labeller = labeller(G = c("2" = "2 groups",
                                         "10" = "10 groups") )
@@ -173,8 +173,8 @@ ggplot(rand_df, aes(x = n, y = rand, fill=Model ) ) +
   # scale_fill_manual( values = c(rocket(8)[4], mako(8)[5], inferno(8)[7]) ) +
   scale_fill_manual( values = c("darkgoldenrod1", "cyan4", "deeppink4", "forestgreen", "salmon") ) +
   xlab("Sample size")  +
-  ylab("ARI")+
-  ylim(min(rand_df$rand),1)+
+  ylab("Average ARI")+
+  ylim(0,1)+
   facet_wrap( ~ G, scales = "free",
               labeller = labeller(G = c("2" = "2 groups",
                                         "10" = "10 groups") )
