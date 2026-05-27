@@ -2,7 +2,7 @@
 # posterior of HDP under a univariate conjugate Gaussian mixture model.
 
 # source functions to sample the unnormalized global weights using rejection sampler.
-source("rejectionsampler.R")
+source("01_Simulation_study/auxiliary_functions/rejectionsampler.R")
 
 # Function to draw samples from a dirichlet distribution.
 # alpha : concentration parameters

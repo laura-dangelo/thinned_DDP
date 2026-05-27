@@ -15,6 +15,8 @@
 library(SANple)
 library(BNPmix)
 library(thinnedDDP)
+source("01_Simulation_study/auxiliary_functions/BGS.R")
+source("01_Simulation_study/auxiliary_functions/postestimates.R")
 
 
 # number of groups and sample sizes (to import and save data)
@@ -267,6 +269,49 @@ for(repl in 1:n_datasets) {
           print(nameerror)
         } )
 
+      
+      
+      
+      
+      #-----#  #-----#  #-----#  #-----#
+      #-----#         HDP        #-----#
+      #-----#  #-----#  #-----#  #-----#
+      
+      yHDP = list()
+      for(g in unique(data$group)){
+        yHDP[[g]] = data$y[data$group==g]
+      }
+      cat("Running HDP \n")
+      
+      tryCatch(
+        {
+          seqq = seq(range(data$y)[1]-2, range(data$y)[2]+2, length.out = 300)
+          set.seed(12345)
+          tmp_HDP = blocked_gibbs(x = yHDP, L.max = trunc, gam = 1, phi.param = c(0, 1, 1), b0 = 0.1, 
+                                        N = 1, Burn.in = burnin, M = nrep-burnin, est.density = TRUE, y.grid = seqq)
+          
+          
+          run_gibbs_HDP = list()
+          for(idlist in 1:length(seq_thinning)) {
+            run_gibbs_HDP[[idlist]] = tmp_HDP[[seq_thinning[idlist]]]
+          }
+          
+          namesave = paste0("01_Simulation_study/results/run_HDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
+          saveRDS(run_gibbs_HDP, file = namesave)
+          
+          time_HDP = run_gibbs_HDP$tot_time
+          namesave = paste0("01_Simulation_study/results/time_HDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
+          saveRDS(time_HDP, file = namesave)
+          
+          rm(run_gibbs_HDP)
+          
+        }, error = function(e) {
+          nameerror = paste0("01_Simulation_study/results/ERROR_run_HDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl, ".RDS")
+          errorfile = list("i" = i, "j" = j, "repl" = repl)
+          saveRDS(errorfile, file = nameerror)
+          print(nameerror)
+        } )
+      
 
     }
   }
