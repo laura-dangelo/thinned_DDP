@@ -181,7 +181,7 @@ for(repl in 1:n_datasets) {
       seqq = density_est_thinnedDDP$seq
       
       nameopen = paste0("01_Simulation_study/results/true_density_", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
-      load(nameopen)
+      truth = readRDS(nameopen)
 
       TV_thinnedDDP = 0
       for(gg in 1:length(unique(data$group))){
