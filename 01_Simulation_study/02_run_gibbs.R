@@ -24,6 +24,7 @@ n_ss = 4 # number of different configuration of sample size
 n_datasets = 50
 tot_datasets = n_datasets * n_ss * length(n_groups)
 
+seq_thinning = seq(1, 5000, by = 2)
 
 # start loop for fitting the models
 for(repl in 1:n_datasets) {
@@ -195,6 +196,18 @@ for(repl in 1:n_datasets) {
                                              m0 = mean(data$y), tau0 = tau0,
                                              lambda0 = gam0, gamma0 = lam0
                                              )
+          
+          run_gibbs_CAM$sim$mu = run_gibbs_CAM$sim$mu[seq_thinning,]
+          run_gibbs_CAM$sim$sigma2 = run_gibbs_CAM$sim$sigma2[seq_thinning,]
+          run_gibbs_CAM$sim$obs_cluster = run_gibbs_CAM$sim$obs_cluster[seq_thinning,]
+          run_gibbs_CAM$sim$distr_cluster = run_gibbs_CAM$sim$distr_cluster[seq_thinning,]
+          run_gibbs_CAM$sim$pi = run_gibbs_CAM$sim$pi[seq_thinning,]
+          run_gibbs_CAM$sim$omega = run_gibbs_CAM$sim$omega[,,seq_thinning]
+          run_gibbs_CAM$sim$alpha = run_gibbs_CAM$sim$alpha[seq_thinning]
+          run_gibbs_CAM$sim$beta = run_gibbs_CAM$sim$beta[seq_thinning]
+          run_gibbs_CAM$sim$maxK = run_gibbs_CAM$sim$maxK[seq_thinning]
+          run_gibbs_CAM$sim$maxL = run_gibbs_CAM$sim$maxL[seq_thinning]
+          
           namesave = paste0("01_Simulation_study/results/run_CAM", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
           saveRDS(run_gibbs_CAM, file = namesave)
 
@@ -233,7 +246,11 @@ for(repl in 1:n_datasets) {
                                                             wei = 0.5),
                                                output = list(grid = seqq)
           )
-
+          run_gibbs_gmDDP$density = run_gibbs_gmDDP$density[,,seq_thinning]
+          run_gibbs_gmDDP$clust = run_gibbs_gmDDP$clust[seq_thinning,]
+          run_gibbs_gmDDP$group_log = run_gibbs_gmDDP$group_log[seq_thinning,]
+          run_gibbs_gmDDP$wvals = run_gibbs_gmDDP$wvals[seq_thinning,]
+          
           namesave = paste0("01_Simulation_study/results/run_gmDDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
           saveRDS(run_gibbs_gmDDP, file = namesave)
 
