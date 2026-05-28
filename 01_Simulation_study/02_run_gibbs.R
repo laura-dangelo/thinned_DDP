@@ -29,7 +29,7 @@ tot_datasets = n_datasets * n_ss * length(n_groups)
 seq_thinning = seq(1, 5000, by = 2)
 
 # start loop for fitting the models
-for(repl in 1:n_datasets) {
+for(repl in 26:n_datasets) {
   for(i in 1:length(n_groups) ){
     for(j in 1:n_ss){
       
@@ -85,7 +85,7 @@ for(repl in 1:n_datasets) {
                                                                 sigma2_start = sigma2_start,
                                                                 cl_start = cl_start-1,
                                                                 progressbar = T)
-          
+
           namesave = paste0("01_Simulation_study/results/run_thinnedDDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
           saveRDS(run_gibbs_thinnedDDP, file = namesave)
 
@@ -123,7 +123,7 @@ for(repl in 1:n_datasets) {
                                                   progressbar = T)
           namesave = paste0("01_Simulation_study/results/run_pool", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
           saveRDS(run_gibbs_pool, file = namesave)
-          
+
           time_pool = run_gibbs_pool$time
           namesave = paste0("01_Simulation_study/results/time_pool", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
           saveRDS(time_pool, file = namesave)
@@ -165,7 +165,7 @@ for(repl in 1:n_datasets) {
           }
           namesave = paste0("01_Simulation_study/results/run_nopool", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
           saveRDS(run_gibbs_nopool, file = namesave)
-          
+
           namesave = paste0("01_Simulation_study/results/time_nopool", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
           saveRDS(time_nopool, file = namesave)
 
@@ -193,7 +193,7 @@ for(repl in 1:n_datasets) {
                                              burn = burnin,
                                              y = data$y,
                                              group = data$group,
-                                             maxK = 40,
+                                             maxK = 50,
                                              maxL = trunc,
                                              m0 = mean(data$y), tau0 = tau0,
                                              lambda0 = gam0, gamma0 = lam0
@@ -252,7 +252,7 @@ for(repl in 1:n_datasets) {
           run_gibbs_gmDDP$clust = run_gibbs_gmDDP$clust[seq_thinning,]
           run_gibbs_gmDDP$group_log = run_gibbs_gmDDP$group_log[seq_thinning,]
           run_gibbs_gmDDP$wvals = run_gibbs_gmDDP$wvals[seq_thinning,]
-          
+
           namesave = paste0("01_Simulation_study/results/run_gmDDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
           saveRDS(run_gibbs_gmDDP, file = namesave)
 
@@ -269,42 +269,42 @@ for(repl in 1:n_datasets) {
           print(nameerror)
         } )
 
+
+
       
-      
-      
-      
+
       #-----#  #-----#  #-----#  #-----#
       #-----#         HDP        #-----#
       #-----#  #-----#  #-----#  #-----#
-      
+
       yHDP = list()
       for(g in unique(data$group)){
         yHDP[[g]] = data$y[data$group==g]
       }
       cat("Running HDP \n")
-      
+
       tryCatch(
         {
           seqq = seq(range(data$y)[1]-2, range(data$y)[2]+2, length.out = 300)
           set.seed(12345)
-          tmp_HDP = blocked_gibbs(x = yHDP, L.max = trunc, gam = 1, phi.param = c(0, 1, 1), b0 = 0.1, 
-                                        N = 1, Burn.in = burnin, M = nrep-burnin, est.density = TRUE, y.grid = seqq)
-          
-          
+          tmp_HDP = blocked_gibbs(x = yHDP, L.max = trunc, gam = 1, phi.param = c(0, 1, 1), b0 = 0.1,
+                                        N = 1, Burn.in = burnin, M = 2500, est.density = TRUE, y.grid = seqq)
+
+
           run_gibbs_HDP = list()
           for(idlist in 1:length(seq_thinning)) {
             run_gibbs_HDP[[idlist]] = tmp_HDP[[seq_thinning[idlist]]]
           }
-          
+
           namesave = paste0("01_Simulation_study/results/run_HDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
           saveRDS(run_gibbs_HDP, file = namesave)
-          
+
           time_HDP = run_gibbs_HDP$tot_time
           namesave = paste0("01_Simulation_study/results/time_HDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
           saveRDS(time_HDP, file = namesave)
-          
+
           rm(run_gibbs_HDP)
-          
+
         }, error = function(e) {
           nameerror = paste0("01_Simulation_study/results/ERROR_run_HDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl, ".RDS")
           errorfile = list("i" = i, "j" = j, "repl" = repl)
