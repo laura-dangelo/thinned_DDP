@@ -129,6 +129,11 @@ for(repl in 1:n_datasets) {
       rand_gmDDP = readRDS(nameopen)
       newdata = c("GM-DDP", n_groups[i], sum(n_groups[i]/2*ssg*j), rand_gmDDP)
       rand_df[nrow(rand_df)+1,] = newdata
+      
+      nameopen = paste0("01_Simulation_study/results/rand_HDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
+      rand_HDP = readRDS(nameopen)
+      newdata = c("HDP", n_groups[i], sum(n_groups[i]/2*ssg*j), rand_HDP)
+      rand_df[nrow(rand_df)+1,] = newdata
 
     }
   }
@@ -171,7 +176,7 @@ ggplot(rand_df, aes(x = n, y = rand, fill=Model ) ) +
     strip.background = element_rect( fill=NA, color="gray" )
   )+
   # scale_fill_manual( values = c(rocket(8)[4], mako(8)[5], inferno(8)[7]) ) +
-  scale_fill_manual( values = c("darkgoldenrod1", "cyan4", "deeppink4", "forestgreen", "salmon") ) +
+  scale_fill_manual( values = c("darkgoldenrod1", "cyan4","blue", "deeppink4", "forestgreen", "salmon") ) +
   xlab("Sample size")  +
   ylab("Average ARI")+
   ylim(0,1)+

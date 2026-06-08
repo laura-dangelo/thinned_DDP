@@ -221,6 +221,21 @@ for(repl in 1:n_datasets) {
 
       newdata = c("GM-DDP", n_groups[i], sum(n_groups[i]/2*ssg*j), TV_gmDDP)
       TVdist_df[nrow(TVdist_df)+1,] = newdata
+      
+      
+      
+      ### HDP ###
+      nameopen = paste0("01_Simulation_study/results/density_est_HDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
+      density_est_HDP = readRDS(file = nameopen)
+      
+      TV_HDP = 0
+      for(gg in 1:length(unique(data$group))){
+        TV_HDP = TV_HDP + TV_distance(seqq, truth[gg,], density_est_HDP$mean[,gg])
+      }
+      TV_HDP = TV_HDP/(length(unique(data$group)))
+      
+      newdata = c("HDP", n_groups[i], sum(n_groups[i]/2*ssg*j), TV_HDP)
+      TVdist_df[nrow(TVdist_df)+1,] = newdata
 
     }
   }
@@ -263,7 +278,7 @@ ggplot(TVdist_df, aes(x = n, y = TV, fill=Model ) ) +
     strip.background = element_rect( fill=NA, color="gray" )
   )+
   # scale_fill_manual( values = c(rocket(8)[4], mako(8)[5], inferno(8)[7]) ) +
-  scale_fill_manual( values = c("darkgoldenrod1", "cyan4", "deeppink4") ) +
+  scale_fill_manual( values = c("darkgoldenrod1", "cyan4", "blue", "deeppink4") ) +
   xlab("Sample size")  +
   ylab("TV distance")+
   # ylim(0.7,5.9)+
