@@ -286,6 +286,7 @@ for(repl in 1:n_datasets) {
 
       tryCatch(
         {
+          start = Sys.time()
           seqq = seq(range(data$y)[1]-2, range(data$y)[2]+2, length.out = 300)
           set.seed(12345)
           tmp_HDP = blocked_gibbs(x = yHDP, L.max = trunc, gam = 1, phi.param = c(0, 1, 1), b0 = 0.1,
@@ -296,11 +297,12 @@ for(repl in 1:n_datasets) {
           for(idlist in 1:length(seq_thinning)) {
             run_gibbs_HDP[[idlist]] = tmp_HDP[[seq_thinning[idlist]]]
           }
+          end = Sys.time()
 
           namesave = paste0("01_Simulation_study/results/run_HDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
           saveRDS(run_gibbs_HDP, file = namesave)
 
-          time_HDP = run_gibbs_HDP$tot_time
+          time_HDP = end - start
           namesave = paste0("01_Simulation_study/results/time_HDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
           saveRDS(time_HDP, file = namesave)
 

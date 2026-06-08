@@ -41,6 +41,7 @@ for(repl in 1:n_datasets) {
       time_gmDDP = readRDS(nameopen)
       newdata = c("GM-DDP", n_groups[i], sum(n_groups[i]/2*ssg*j), time_gmDDP)
       time_df[nrow(time_df)+1,] = newdata
+ 
       
       
     }
@@ -79,7 +80,7 @@ ggplot(time_df, aes(x = n, y = log(time), fill=Model ) ) +
     strip.background = element_rect( fill=NA, color="gray" )
   )+
   # scale_fill_manual( values = c(rocket(8)[4], mako(8)[5], inferno(8)[7]) ) +
-  scale_fill_manual( values = c("darkgoldenrod1", "cyan4", "deeppink4") ) +
+  scale_fill_manual( values = c("darkgoldenrod1", "cyan4",  "deeppink4") ) +
   xlab("Sample size")  +
   ylab("log(time)")+
   facet_wrap( ~ G, scales = "free",

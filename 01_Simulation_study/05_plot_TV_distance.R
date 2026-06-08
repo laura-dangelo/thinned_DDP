@@ -134,11 +134,10 @@ ggplot(TVdist_df2, aes(x = n, y = TV, fill=Model ) ) +
     axis.line.x.bottom = element_line(color="gray"),
     #
     legend.position = "bottom",
-    legend.background = element_rect(fill='transparent', color = 'transparent'), #transparent legend bg
-    legend.box.background = element_rect(fill='transparent', color = 'transparent'), #transparent legend panel
-    legend.text = element_text(size=12),
-    strip.text = element_text(size=12),
-    text = element_text(size = 12),
+    legend.background = element_rect(fill='transparent', color = 'white'), #transparent legend bg
+    legend.box.background = element_rect(fill='transparent'), #transparent legend panel
+    legend.text = element_text(size=10),
+    strip.text = element_text(size=10),
     strip.background = element_rect( fill=NA, color="gray" )
   )+
   # scale_fill_manual( values = c(rocket(8)[4], mako(8)[5], inferno(8)[7]) ) +
@@ -270,11 +269,10 @@ ggplot(TVdist_df, aes(x = n, y = TV, fill=Model ) ) +
     axis.line.x.bottom = element_line(color="gray"),
     #
     legend.position = "bottom",
-    legend.background = element_rect(fill='transparent', color = 'transparent'), #transparent legend bg
-    legend.box.background = element_rect(fill='transparent', color = 'transparent'), #transparent legend panel
-    legend.text = element_text(size=12),
-    strip.text = element_text(size=12),
-    text = element_text(size = 12),
+    legend.background = element_rect(fill='transparent', color = 'white'), #transparent legend bg
+    legend.box.background = element_rect(fill='transparent'), #transparent legend panel
+    legend.text = element_text(size=10),
+    strip.text = element_text(size=10),
     strip.background = element_rect( fill=NA, color="gray" )
   )+
   # scale_fill_manual( values = c(rocket(8)[4], mako(8)[5], inferno(8)[7]) ) +

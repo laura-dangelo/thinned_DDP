@@ -15,7 +15,7 @@ n_datasets = 50
 tot_datasets = n_datasets * n_ss * length(n_groups)
 
 
-#-----------#  COMPARE ARI WITH COMPLETE AND NO-POOLING MODELS  #-----------#
+#-----------#  COMPARE AREA WITH COMPLETE AND NO-POOLING MODELS  #-----------#
 
 area_df2 = data.frame("Model" = character(), "G" = numeric(), "n" = numeric(), "area" = numeric())
 
@@ -100,11 +100,10 @@ ggplot(area_df2, aes(x = n, y = area, fill=Model ) ) +
     axis.line.x.bottom = element_line(color="gray"),
     #
     legend.position = "bottom",
-    legend.background = element_rect(fill='transparent', color = 'transparent'), #transparent legend bg
-    legend.box.background = element_rect(fill='transparent', color = 'transparent'), #transparent legend panel
-    legend.text = element_text(size=12),
-    strip.text = element_text(size=12),
-    text = element_text(size = 12),
+    legend.background = element_rect(fill='transparent', color = 'white'), #transparent legend bg
+    legend.box.background = element_rect(fill='transparent'), #transparent legend panel
+    legend.text = element_text(size=10),
+    strip.text = element_text(size=10),
     strip.background = element_rect( fill=NA, color="gray" )
   )+
   # scale_fill_manual( values = c(rocket(8)[4], mako(8)[5], inferno(8)[7]) ) +
@@ -126,7 +125,7 @@ ggsave("01_Simulation_study/output_images/07_01_areaCI.pdf", width = 8, height =
 #-----------# #-----------# #-----------# #-----------# #-----------# #-----------# #-----------# 
 #-----------# #-----------# #-----------# #-----------# #-----------# #-----------# #-----------# 
 
-#-----------#  COMPARE ARI FOR DIFFERENT MODELS #-----------#
+#-----------#  COMPARE AREA FOR DIFFERENT MODELS #-----------#
 
 area_df = data.frame("Model" = character(), "G" = numeric(), "n" = numeric(), "area" = numeric())
 
@@ -178,6 +177,21 @@ for(repl in 1:n_datasets) {
 
       newdata = c("GM-DDP", n_groups[i], sum(n_groups[i]/2*ssg*j), area_CI_gmDDP)
       area_df[nrow(area_df)+1,] = newdata
+      
+      
+      #-----# #-----# #-----# #-----#
+      #-----#        HDP      #-----#
+      #-----# #-----# #-----# #-----#
+      
+      nameopen = paste0("01_Simulation_study/results/density_CI_HDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
+      density_CI_HDP = readRDS(nameopen)
+      
+      diff_area = density_CI_HDP$upper - density_CI_HDP$lower
+      area_CI_HDP = tapply(diff_area, factor(density_CI_HDP$Group), sum)
+      area_CI_HDP = mean(area_CI_HDP)
+      
+      newdata = c("HDP", n_groups[i], sum(n_groups[i]/2*ssg*j), area_CI_HDP)
+      area_df[nrow(area_df)+1,] = newdata
 
     }
   }
@@ -215,15 +229,14 @@ ggplot(area_df, aes(x = n, y = area, fill=Model ) ) +
     axis.line.x.bottom = element_line(color="gray"),
     #
     legend.position = "bottom",
-    legend.background = element_rect(fill='transparent', color = 'transparent'), #transparent legend bg
-    legend.box.background = element_rect(fill='transparent', color = 'transparent'), #transparent legend panel
-    legend.text = element_text(size=12),
-    strip.text = element_text(size=12),
-    text = element_text(size = 12),
+    legend.background = element_rect(fill='transparent', color = 'white'), #transparent legend bg
+    legend.box.background = element_rect(fill='transparent'), #transparent legend panel
+    legend.text = element_text(size=10),
+    strip.text = element_text(size=10),
     strip.background = element_rect( fill=NA, color="gray" )
   )+
   # scale_fill_manual( values = c(rocket(8)[4], mako(8)[5], inferno(8)[7]) ) +
-  scale_fill_manual( values = c("darkgoldenrod1", "cyan4", "deeppink4") ) +
+  scale_fill_manual( values = c("darkgoldenrod1", "cyan4", "blue", "deeppink4") ) +
   xlab("Sample size")  +
   ylab("Area credible bands")+
   facet_wrap( ~ G, scales = "free",
