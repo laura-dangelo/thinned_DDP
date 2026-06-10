@@ -1,7 +1,5 @@
 *.Rdata
 *.RData
-*.RDS
-.RDS
 .Rdata
 .RData
 .Rproj.user
@@ -9,3 +7,6 @@
 .Rproj.user/*
 /.Rproj.user
 .Rhistory*
+results/
+results_sensitivity/
+data/
