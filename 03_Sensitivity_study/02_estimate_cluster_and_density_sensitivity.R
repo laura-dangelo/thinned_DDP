@@ -36,33 +36,33 @@ for(repl in 1:n_datasets) {
       #-----#  #-----#  #-----#  #-----#  #-----#
 
       nameopen = paste0("03_Sensitivity_study/results_sensitivity/run_thinnedDDP_unif", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
-      run_gibbs_thinnedDDP = readRDS(file = nameopen)
+      run_gibbs_thinnedDDP_unif = readRDS(file = nameopen)
 
 
       #-----# Estimate partition of observations #-----#
-      cl_point_est_thinnedDDP = salso::salso((run_gibbs_thinnedDDP$cl+1), nCores = 3 )
+      cl_point_est_thinnedDDP_unif = salso::salso((run_gibbs_thinnedDDP_unif$cl+1), nCores = 3 )
       namesave = paste0("03_Sensitivity_study/results_sensitivity/est_cl_thinnedDDP_unif", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
-      saveRDS(cl_point_est_thinnedDDP, file = namesave)
+      saveRDS(cl_point_est_thinnedDDP_unif, file = namesave)
 
-      rand_thinnedDDP = 0
+      rand_thinnedDDP_unif = 0
       for(gg in 1:length(unique(data$group))){
-          rand_thinnedDDP = rand_thinnedDDP + adjustedRandIndex(cl_point_est_thinnedDDP[data$group==gg], data$cl[data$group==gg])
+          rand_thinnedDDP_unif = rand_thinnedDDP_unif + adjustedRandIndex(cl_point_est_thinnedDDP_unif[data$group==gg], data$cl[data$group==gg])
       }
-      rand_thinnedDDP = rand_thinnedDDP/(length(unique(data$group)))
+      rand_thinnedDDP_unif = rand_thinnedDDP_unif/(length(unique(data$group)))
 
       namesave = paste0("03_Sensitivity_study/results_sensitivity/rand_thinnedDDP_unif", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
-      saveRDS(rand_thinnedDDP, file = namesave)
+      saveRDS(rand_thinnedDDP_unif, file = namesave)
 
 
       #-----# #-----# Compute density estimate #-----# #-----#
       seqq = seq(range(data$y)[1]-2, range(data$y)[2]+2, length.out = 300)
-      density_est_thinnedDDP = thinnedDDP::compute_density(seqq,
-                                                      weight = run_gibbs_thinnedDDP$pi,
-                                                      means = t(run_gibbs_thinnedDDP$mu),
-                                                      variances = t(run_gibbs_thinnedDDP$sigma2)
+      density_est_thinnedDDP_unif = thinnedDDP::compute_density(seqq,
+                                                      weight = run_gibbs_thinnedDDP_unif$pi,
+                                                      means = t(run_gibbs_thinnedDDP_unif$mu),
+                                                      variances = t(run_gibbs_thinnedDDP_unif$sigma2)
                                                       )
       namesave = paste0("03_Sensitivity_study/results_sensitivity/density_est_thinnedDDP_unif", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
-      saveRDS(density_est_thinnedDDP, file = namesave)
+      saveRDS(density_est_thinnedDDP_unif, file = namesave)
 
 
       rm(run_gibbs_thinnedDDP_unif)
@@ -78,33 +78,33 @@ for(repl in 1:n_datasets) {
       #-----#  #-----#  #-----#  #-----#  #-----#
       
       nameopen = paste0("03_Sensitivity_study/results_sensitivity/run_thinnedDDP_1010", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
-      run_gibbs_thinnedDDP = readRDS(file = nameopen)
+      run_gibbs_thinnedDDP_1010 = readRDS(file = nameopen)
       
-      
+
       #-----# Estimate partition of observations #-----#
-      cl_point_est_thinnedDDP = salso::salso((run_gibbs_thinnedDDP$cl+1), nCores = 3 )
+      cl_point_est_thinnedDDP_1010 = salso::salso((run_gibbs_thinnedDDP_1010$cl+1), nCores = 3 )
       namesave = paste0("03_Sensitivity_study/results_sensitivity/est_cl_thinnedDDP_1010", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
-      saveRDS(cl_point_est_thinnedDDP, file = namesave)
-      
-      rand_thinnedDDP = 0
+      saveRDS(cl_point_est_thinnedDDP_1010, file = namesave)
+
+      rand_thinnedDDP_1010 = 0
       for(gg in 1:length(unique(data$group))){
-        rand_thinnedDDP = rand_thinnedDDP + adjustedRandIndex(cl_point_est_thinnedDDP[data$group==gg], data$cl[data$group==gg])
+        rand_thinnedDDP_1010 = rand_thinnedDDP_1010 + adjustedRandIndex(cl_point_est_thinnedDDP_1010[data$group==gg], data$cl[data$group==gg])
       }
-      rand_thinnedDDP = rand_thinnedDDP/(length(unique(data$group)))
-      
+      rand_thinnedDDP_1010 = rand_thinnedDDP_1010/(length(unique(data$group)))
+
       namesave = paste0("03_Sensitivity_study/results_sensitivity/rand_thinnedDDP_1010", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
-      saveRDS(rand_thinnedDDP, file = namesave)
-      
+      saveRDS(rand_thinnedDDP_1010, file = namesave)
+
       
       #-----# #-----# Compute density estimate #-----# #-----#
       seqq = seq(range(data$y)[1]-2, range(data$y)[2]+2, length.out = 300)
-      density_est_thinnedDDP = thinnedDDP::compute_density(seqq,
-                                                           weight = run_gibbs_thinnedDDP$pi,
-                                                           means = t(run_gibbs_thinnedDDP$mu),
-                                                           variances = t(run_gibbs_thinnedDDP$sigma2)
+      density_est_thinnedDDP_1010 = thinnedDDP::compute_density(seqq,
+                                                           weight = run_gibbs_thinnedDDP_1010$pi,
+                                                           means = t(run_gibbs_thinnedDDP_1010$mu),
+                                                           variances = t(run_gibbs_thinnedDDP_1010$sigma2)
       )
       namesave = paste0("03_Sensitivity_study/results_sensitivity/density_est_thinnedDDP_1010", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
-      saveRDS(density_est_thinnedDDP, file = namesave)
+      saveRDS(density_est_thinnedDDP_1010, file = namesave)
       
       
       rm(run_gibbs_thinnedDDP_1010)
@@ -122,33 +122,33 @@ for(repl in 1:n_datasets) {
       #-----#  #-----#  #-----#  #-----#  #-----#
       
       nameopen = paste0("03_Sensitivity_study/results_sensitivity/run_thinnedDDP_0101", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
-      run_gibbs_thinnedDDP = readRDS(file = nameopen)
+      run_gibbs_thinnedDDP_0101 = readRDS(file = nameopen)
       
-      
+
       #-----# Estimate partition of observations #-----#
-      cl_point_est_thinnedDDP = salso::salso((run_gibbs_thinnedDDP$cl+1), nCores = 3 )
+      cl_point_est_thinnedDDP_0101 = salso::salso((run_gibbs_thinnedDDP_0101$cl+1), nCores = 3 )
       namesave = paste0("03_Sensitivity_study/results_sensitivity/est_cl_thinnedDDP_0101", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
-      saveRDS(cl_point_est_thinnedDDP, file = namesave)
-      
-      rand_thinnedDDP = 0
+      saveRDS(cl_point_est_thinnedDDP_0101, file = namesave)
+
+      rand_thinnedDDP_0101 = 0
       for(gg in 1:length(unique(data$group))){
-        rand_thinnedDDP = rand_thinnedDDP + adjustedRandIndex(cl_point_est_thinnedDDP[data$group==gg], data$cl[data$group==gg])
+        rand_thinnedDDP_0101 = rand_thinnedDDP_0101 + adjustedRandIndex(cl_point_est_thinnedDDP_0101[data$group==gg], data$cl[data$group==gg])
       }
-      rand_thinnedDDP = rand_thinnedDDP/(length(unique(data$group)))
-      
+      rand_thinnedDDP_0101 = rand_thinnedDDP_0101/(length(unique(data$group)))
+
       namesave = paste0("03_Sensitivity_study/results_sensitivity/rand_thinnedDDP_0101", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
-      saveRDS(rand_thinnedDDP, file = namesave)
-      
+      saveRDS(rand_thinnedDDP_0101, file = namesave)
+
       
       #-----# #-----# Compute density estimate #-----# #-----#
       seqq = seq(range(data$y)[1]-2, range(data$y)[2]+2, length.out = 300)
-      density_est_thinnedDDP = thinnedDDP::compute_density(seqq,
-                                                           weight = run_gibbs_thinnedDDP$pi,
-                                                           means = t(run_gibbs_thinnedDDP$mu),
-                                                           variances = t(run_gibbs_thinnedDDP$sigma2)
+      density_est_thinnedDDP_0101 = thinnedDDP::compute_density(seqq,
+                                                           weight = run_gibbs_thinnedDDP_0101$pi,
+                                                           means = t(run_gibbs_thinnedDDP_0101$mu),
+                                                           variances = t(run_gibbs_thinnedDDP_0101$sigma2)
       )
       namesave = paste0("03_Sensitivity_study/results_sensitivity/density_est_thinnedDDP_0101", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
-      saveRDS(density_est_thinnedDDP, file = namesave)
+      saveRDS(density_est_thinnedDDP_0101, file = namesave)
       
       
       rm(run_gibbs_thinnedDDP_0101)

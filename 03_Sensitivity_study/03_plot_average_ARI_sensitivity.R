@@ -14,7 +14,7 @@ library(viridisLite)
 n_groups = c(2, 10)
 ssg = c(10, 30)
 n_ss = 4 # number of different configuration of sample size
-n_datasets = 6
+n_datasets = 25
 
 tot_datasets = n_datasets * n_ss * length(n_groups)
 
@@ -28,7 +28,7 @@ for(repl in 1:n_datasets) {
       
       nameopen = paste0("01_Simulation_study/results/rand_thinnedDDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
       rand_thinnedDDP = readRDS(nameopen)
-      newdata = c("Beta(3,3)", n_groups[i], sum(n_groups[i]/2*ssg*j), rand_thinnedDDP)
+      newdata = c("Beta(3, 3)", n_groups[i], sum(n_groups[i]/2*ssg*j), rand_thinnedDDP)
       rand_df2[nrow(rand_df2)+1,] = newdata
       
       
@@ -39,12 +39,12 @@ for(repl in 1:n_datasets) {
      
       nameopen = paste0("03_Sensitivity_study/results_sensitivity/rand_thinnedDDP_1010", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
       rand_thinnedDDP_1010 = readRDS(nameopen)
-      newdata = c("Beta(10,10)", n_groups[i], sum(n_groups[i]/2*ssg*j), rand_thinnedDDP_1010)
+      newdata = c("Beta(10, 10)", n_groups[i], sum(n_groups[i]/2*ssg*j), rand_thinnedDDP_1010)
       rand_df2[nrow(rand_df2)+1,] = newdata
       
       nameopen = paste0("03_Sensitivity_study/results_sensitivity/rand_thinnedDDP_0101", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
       rand_thinnedDDP_0101 = readRDS(nameopen)
-      newdata = c("Beta(0.1,0.1)", n_groups[i], sum(n_groups[i]/2*ssg*j), rand_thinnedDDP_0101)
+      newdata = c("Beta(0.1, 0.1)", n_groups[i], sum(n_groups[i]/2*ssg*j), rand_thinnedDDP_0101)
       rand_df2[nrow(rand_df2)+1,] = newdata
       
       
@@ -91,7 +91,7 @@ ggplot(rand_df2, aes(x = n, y = rand, fill=Prior ) ) +
   # scale_fill_manual( values = c(rocket(8)[4], mako(8)[5], inferno(8)[7]) ) +
   scale_fill_manual( values = c("forestgreen", "royalblue3", "deeppink4","orange" ) ) +
   xlab("Sample size")  +
-  ylim(0,1) +
+  ylim(0.7,1) +
   ylab("Average ARI")+
   facet_wrap( ~ G, scales = "free",
               labeller = labeller(G = c("2" = "2 groups",
