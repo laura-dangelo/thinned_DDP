@@ -35,7 +35,7 @@ lam0 = (gam0-1)
 nrep = 30000
 burnin = (floor(nrep/2))
 
-if(!file.exists("02_Application/run_CPP.RDS")) {
+if(!file.exists("02_Application/results/run_CPP.RDS")) {
   run_gibbs_CPP = thinnedDDP::sampler_thinnedDDP(nrep = nrep,
                                                  burnin = burnin,
                                                  y = CPP$gest,
@@ -49,9 +49,9 @@ if(!file.exists("02_Application/run_CPP.RDS")) {
                                                  sigma2_start = sigma2_start,
                                                  cl_start = cl_start-1,
                                                  progressbar = T)
-  saveRDS(run_gibbs_CPP, file = "02_Application/run_CPP.RDS")
+  saveRDS(run_gibbs_CPP, file = "02_Application/results/run_CPP.RDS")
 } else {
-  run_gibbs_CPP = readRDS(file = "02_Application/run_CPP.RDS")
+  run_gibbs_CPP = readRDS(file = "02_Application/results/run_CPP.RDS")
 }
 
 
@@ -68,12 +68,12 @@ for(j in 2:4) { lines(run_gibbs_CPP$mu[,j], col=j) }
 
 
 #-----# Estimate partition of observations #-----# 
-if(!file.exists("02_Application/est_cl_CPP.RDS")){
+if(!file.exists("02_Application/results/est_cl_CPP.RDS")){
   cl_point_est_CPP = salso::salso((run_gibbs_CPP$cl+1), nCores = 3 )
-  namesave = paste0("02_Application/est_cl_CPP.RDS")
+  namesave = paste0("02_Application/results/est_cl_CPP.RDS")
   saveRDS(cl_point_est_CPP, file = namesave)
 } else {
-  cl_point_est_CPP = readRDS(file = "02_Application/est_cl_CPP.RDS")
+  cl_point_est_CPP = readRDS(file = "02_Application/results/est_cl_CPP.RDS")
 }
 
 
@@ -87,21 +87,21 @@ tapply(CPP$gest, cl_point_est_CPP, mean)
 
 
 #-----# #-----# Compute density estimate #-----# #-----#
-if(!file.exists("02_Application/density_est_CPP.RDS")){
+if(!file.exists("02_Application/results/density_est_CPP.RDS")){
   seqq = seq(range(CPP$gest)[1]-2, range(CPP$gest)[2]+2, length.out = 300)
   density_est_CPP = thinnedDDP::compute_density(seqq,
                                                 weight = run_gibbs_CPP$pi,
                                                 means = t(run_gibbs_CPP$mu),
                                                 variances = t(run_gibbs_CPP$sigma2)
   )
-  namesave = paste0("02_Application/density_est_CPP.RDS")
+  namesave = paste0("02_Application/results/density_est_CPP.RDS")
   saveRDS(density_est_CPP, file = namesave)
 } else {
   seqq = seq(range(CPP$gest)[1]-2, range(CPP$gest)[2]+2, length.out = 300)
-  density_est_CPP = readRDS(file = "02_Application/density_est_CPP.RDS")
+  density_est_CPP = readRDS(file = "02_Application/results/density_est_CPP.RDS")
 }
 
-namesave = paste0("02_Application/density_CI_CPP.RDS")
+namesave = paste0("02_Application/results/density_CI_CPP.RDS")
 if(!file.exists(namesave)){
   seqq = density_est_CPP$seq
   CPPdensity_CI_thinnedDDP = matrix(rep(1,length(seqq)), length(seqq), 1)
@@ -132,19 +132,26 @@ if(!file.exists(namesave)){
 
 #-----# #-----# Cluster of hospitals #-----# #-----#
 
-mat_hosp = matrix(0, 12, 12)
-for(iter in 1:7500) {
-  for(g1 in 1:12) {
-    for(g2 in 1:g1) {
-      cl1 = sort(unique(run_gibbs_CPP$cl[iter, run_gibbs_CPP$group==(g1-1)]))
-      cl2 =  sort(unique(run_gibbs_CPP$cl[iter, run_gibbs_CPP$group==(g2-1)]))
-      if( length(c(setdiff(cl1,cl2),setdiff(cl2,cl1)))<3 ) {
-        mat_hosp[g1,g2] = mat_hosp[g1,g2] + 1
-        mat_hosp[g2,g1] = mat_hosp[g1,g2] }
+namemat = paste0("02_Application/results/mat_hosp.RDS")
+if(!file.exists(namemat)){
+  mat_hosp = matrix(0, 12, 12)
+  for(iter in 1:7500) {
+    for(g1 in 1:12) {
+      for(g2 in 1:g1) {
+        cl1 = sort(unique(run_gibbs_CPP$cl[iter, run_gibbs_CPP$group==(g1-1)]))
+        cl2 =  sort(unique(run_gibbs_CPP$cl[iter, run_gibbs_CPP$group==(g2-1)]))
+        if( length(c(setdiff(cl1,cl2),setdiff(cl2,cl1)))<3 ) {
+          mat_hosp[g1,g2] = mat_hosp[g1,g2] + 1
+          mat_hosp[g2,g1] = mat_hosp[g1,g2] }
+      }
     }
   }
+  mat_hosp = mat_hosp/7500
+  saveRDS(mat_hosp, namemat)
+} else {
+  mat_hosp = readRDS(namemat)
 }
-mat_hosp = mat_hosp/7500
+
 
 library(mcclust.ext)
 minVI(mat_hosp)$cl
@@ -186,7 +193,7 @@ ggsave("02_Application/output_images/CPP_heatmap_clusters_hospitals.pdf", plot=h
 #-----# #-----# Plots #-----# #-----#
 data = data.frame("Group" = CPP$hosp, "y" = CPP$gest,
                   "cl" = as.factor(cl_point_est_CPP), "jit" = runif(length(cl_point_est_CPP), -0.3,0.3))
-namesave = paste0("02_Application/density_CI_CPP.RDS")
+namesave = paste0("02_Application/results/density_CI_CPP.RDS")
 CPPdensity_CI_thinnedDDP = readRDS(namesave)
 
 
