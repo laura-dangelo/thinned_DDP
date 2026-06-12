@@ -16,6 +16,20 @@ n_datasets = 50
 tot_datasets = n_datasets * n_ss * length(n_groups)
 
 
+deviance_i = function(y_i, g_i, group, cl, mu, sigma2){
+  cluster_sizes = table(cl[group==g_i])
+  atoms = as.numeric(attr(cluster_sizes, "dimnames")[[1]])
+  comp = cluster_sizes/sum(group==g_i) * dnorm(y_i, mu[atoms], sqrt(sigma2[atoms]))
+  out = log(sum(comp))
+  out
+}
+
+deviance_repl = function(y, group, cl, mu, sigma2){
+  tmp = cbind(y, group)
+  out = apply(tmp, 1, function(x) deviance_i(x[1], x[2], group, cl, mu, sigma2))
+  return(-2*sum(out))
+}
+
 if(!file.exists("01_Simulation_study/output_RDS/effective_sample_size.RDS")){
   ess_df = data.frame("Parameter" = character(), "G" = numeric(), "n" = numeric(), "ess" = double())
   
@@ -28,20 +42,20 @@ if(!file.exists("01_Simulation_study/output_RDS/effective_sample_size.RDS")){
         nameopen = paste0("01_Simulation_study/results/run_thinnedDDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
         run_thinnedDDP = readRDS(nameopen)
         
-        tmpell = sapply(1:G, function(g) effectiveSize(t(run_thinnedDDP$ell[,g,])))
-        newdata = c("Thinning variables", n_groups[i], sum(n_groups[i]/2*ssg*j), mean(tmpell))
+        y = run_thinnedDDP$y
+        group = run_thinnedDDP$group + 1
+        chain_nclust = apply(run_thinnedDDP$cl, 1, function(x) length(unique(x)))
+        chain_cl = run_thinnedDDP$cl +1
+        chain_means = run_thinnedDDP$mu
+        chain_vars = run_thinnedDDP$sigma2
+        rm(run_thinnedDDP)
+        
+        out_dev = sapply(1:length(chain_nclust), function(r) deviance_repl(y, group, chain_cl[r,], chain_means[r,], chain_vars[r,]) )
+        
+        newdata = c("Number of clusters", n_groups[i], sum(n_groups[i]/2*ssg*j), effectiveSize(chain_nclust))
         ess_df[nrow(ess_df)+1,] = newdata
         
-        tmppi = sapply(1:G, function(g) effectiveSize(t(run_thinnedDDP$pi[,g,])))
-        newdata = c("Probabilities", n_groups[i], sum(n_groups[i]/2*ssg*j), mean(tmppi))
-        ess_df[nrow(ess_df)+1,] = newdata
-        
-        tmpcl = effectiveSize(run_thinnedDDP$cl)
-        newdata = c("Cluster allocation", n_groups[i], sum(n_groups[i]/2*ssg*j), mean(tmpcl))
-        ess_df[nrow(ess_df)+1,] = newdata
-        
-        tmpthp = effectiveSize(t(run_thinnedDDP$thinning_prob))
-        newdata = c("Thinning probabilities", n_groups[i], sum(n_groups[i]/2*ssg*j), mean(tmpthp))
+        newdata = c("Deviance", n_groups[i], sum(n_groups[i]/2*ssg*j), effectiveSize(out_dev))
         ess_df[nrow(ess_df)+1,] = newdata
       }
     }
