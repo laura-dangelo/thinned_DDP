@@ -11,11 +11,11 @@ This repository contains the code to replicate the results in the paper "_Depend
 
 Main structure:
 <ul>
-  <li> 01_Simulation_study : folder that contains the scripts and outputs of the simulation study; </li>
-  <li> 02_Application : folder that contains the script and outputs of the real data analysis;  </li>
-  <li> 03_Sensitivity_study : folder that contains the scripts and outputs of the sensitivity study;  </li>
-  <li> thinnedDDP : R package implementing the Gibbs sampler. </li>
-  <li> thinnedDDP_project : R project to be used as main directory for running the code.</li>
+  <li> `01_Simulation_study` : folder that contains the scripts and outputs of the simulation study; </li>
+  <li> `02_Application` : folder that contains the script and outputs of the real data analysis;  </li>
+  <li> `03_Sensitivity_study` : folder that contains the scripts and outputs of the sensitivity study;  </li>
+  <li> `thinnedDDP` : R package implementing the Gibbs sampler. </li>
+  <li> `thinnedDDP_project` : R project to be used as main directory for running the code.</li>
 </ul>
 
 
