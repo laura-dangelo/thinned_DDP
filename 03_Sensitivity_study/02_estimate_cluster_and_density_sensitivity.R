@@ -9,11 +9,9 @@
 library(salso)
 library(mclust)
 
-
-# number of groups and sample sizes (to import and save data)
 n_groups = c(2, 10)
 ssg = c(10, 30)
-n_ss = 4 # number of different configuration of sample size
+n_ss = 4 
 n_datasets = 25
 tot_datasets = n_datasets * n_ss * length(n_groups)
 trunc = 50
