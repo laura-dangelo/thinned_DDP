@@ -1,4 +1,4 @@
-# thinned_DDP
+# Dependent Dirichlet processes via thinning
 
 
 [![arXiv:2508.09576](https://img.shields.io/badge/arXiv-2508.09576-b31b1b.svg)](https://arxiv.org/abs/2506.18223)
