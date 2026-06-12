@@ -1,7 +1,7 @@
 # Dependent Dirichlet processes via thinning
 
 
-[![arXiv:2508.09576](https://img.shields.io/badge/arXiv-2508.09576-b31b1b.svg)](https://arxiv.org/abs/2506.18223)
+[![arXiv:2506.18223](https://img.shields.io/badge/arXiv-2506.18223-b31b1b.svg)](https://arxiv.org/abs/2506.18223)
 ![Last Commit](https://img.shields.io/github/last-commit/laura-dangelo/thinned_DDP)
 
 This repository contains the code to replicate the results in the paper "_Dependent Dirichlet processes via thinning_" by D'Angelo, Nipoti, and Ongaro (available on [arXiv](https://arxiv.org/abs/2506.18223)). It also contains the R package `thinnedDDP`, which implements the Gibbs sampler for posterior inference (see [Installation](#installation)).
