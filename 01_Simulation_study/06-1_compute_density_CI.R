@@ -1,12 +1,18 @@
+#----------------# #----------------# #----------------# #----------------# 
+#                COMPUTE CREDIBLE INTERVALS OF THE DENSITY                #
+#----------------# #----------------# #----------------# #----------------# 
+
+# This script takes as input the density estimates (outputs of the script 03)
+# and computes the 95% point-wise credible intervals.
+
+
 library(TeachingDemos)
 
 n_groups = c(2, 10)
 ssg = c(10, 30)
-n_ss = 4 # number of different configuration of sample size
+n_ss = 4 
 n_datasets = 50
-
 tot_datasets = n_datasets * n_ss * length(n_groups)
-
 
 
 for(repl in 1:n_datasets) {
@@ -58,7 +64,7 @@ for(repl in 1:n_datasets) {
 
 
       #-----# #-----# #-----# #-----#
-      #-----#      Pool       #-----#
+      #-----#     Pooling     #-----#
       #-----# #-----# #-----# #-----#
 
       nameopen = paste0("01_Simulation_study/results/density_est_pool", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
@@ -80,7 +86,7 @@ for(repl in 1:n_datasets) {
 
 
       #-----# #-----# #-----# #-----#
-      #-----#     No pool     #-----#
+      #-----#   No pooling    #-----#
       #-----# #-----# #-----# #-----#
 
       nameopen = paste0("01_Simulation_study/results/density_est_nopool", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
@@ -111,7 +117,6 @@ for(repl in 1:n_datasets) {
 
       rm(density_CI_nopool)
       rm(density_est_nopool)
-
 
 
 
@@ -154,8 +159,6 @@ for(repl in 1:n_datasets) {
 
 
 
-
-
       #-----# #-----# #-----# #-----#
       #-----#      GM-DDP     #-----#
       #-----# #-----# #-----# #-----#
@@ -192,11 +195,6 @@ for(repl in 1:n_datasets) {
 
       rm(density_CI_gmDDP)
       rm(density_est_gmDDP)
-
-
-
-
-
 
 
       

@@ -7,10 +7,14 @@
 # - thinned DDP
 # - a single DP mixture (complete pooling)
 # - independent DP mixtures (a separate model for each group - no pooling)
-# - CAM (from the SANple package)
+# - CAM (from the sanba package)
 # - GM-DDP (from the BNPmix package)
+# - HDP
 
 # The results are then saved into the "01_Simulation_study/results" folder.
+
+# Running this script requires several hours of computing time. 
+# You can avoid running it by downloading the pre-computed chains (see README).
 
 library(sanba)
 library(BNPmix)
@@ -22,7 +26,7 @@ source("01_Simulation_study/auxiliary_functions/postestimates.R")
 # number of groups and sample sizes (to import and save data)
 n_groups = c(2, 10)
 ssg = c(10, 30)
-n_ss = 4 # number of different configuration of sample size
+n_ss = 4 
 n_datasets = 50
 tot_datasets = n_datasets * n_ss * length(n_groups)
 
@@ -180,8 +184,6 @@ for(repl in 1:n_datasets) {
 
 
 
-
-
       #-----#  #-----#  #-----#  #-----#
       #-----#         CAM        #-----#
       #-----#  #-----#  #-----#  #-----#
@@ -272,17 +274,14 @@ for(repl in 1:n_datasets) {
 
 
 
-
-
       #-----#  #-----#  #-----#  #-----#
       #-----#         HDP        #-----#
       #-----#  #-----#  #-----#  #-----#
-
+      cat("Running HDP \n")
       yHDP = list()
       for(g in unique(data$group)){
         yHDP[[g]] = data$y[data$group==g]
       }
-      cat("Running HDP \n")
 
       tryCatch(
         {

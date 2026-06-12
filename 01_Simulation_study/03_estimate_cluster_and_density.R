@@ -5,6 +5,9 @@
 # This script takes as input the MCMC runs and estimates the partition and posterior group-specific densities.
 # The results are then saved into the "01_Simulation_study/results" folder.
 
+# Running this script requires some hours of computing time. 
+# You can avoid running it by downloading the pre-computed estimates (see README).
+
 
 library(salso)
 library(mclust)
@@ -13,7 +16,7 @@ library(mclust)
 # number of groups and sample sizes (to import and save data)
 n_groups = c(2, 10)
 ssg = c(10, 30)
-n_ss = 4 # number of different configuration of sample size
+n_ss = 4 
 n_datasets = 50
 tot_datasets = n_datasets * n_ss * length(n_groups)
 trunc = 50
@@ -204,7 +207,6 @@ for(repl in 1:n_datasets) {
 
 
 
-
       #-----#  #-----#  #-----#  #-----#
       #-----#       GM-DDP       #-----#
       #-----#  #-----#  #-----#  #-----#
@@ -241,10 +243,6 @@ for(repl in 1:n_datasets) {
       rm(cl_point_est_gmDDP)
       rm(density_est_gmDDP)
       rm(rand_gmDDP)
-
-
-
-
 
 
 

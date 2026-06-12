@@ -4,7 +4,8 @@
 
 # This script generates the synthetic data used in the simulation study.
 # The data are organized into G groups, with G = 2, 10.
-# They are generated from group-specific mixtures of Gaussian kernels.
+# They are generated from group-specific mixtures of Gaussian kernels,
+# where some of the groups may share the same data-generating distribution.
 
 # The simulated data are then saved in the "01_Simulation_study/data" folder.
 
@@ -14,7 +15,7 @@ source("01_Simulation_study/auxiliary_functions/00_sim_mixN_thinned.R")
 n_groups = c(2, 10)
 ssg = c(10, 30)
 n_ss = 4 # number of different configuration of sample size
-n_datasets = 50
+n_datasets = 50 # number of replicates
 
 
 
@@ -33,17 +34,17 @@ lapply(sample_sizes_groups, rowSums)
 
 
 
-mu_k = c(-5, 0, 5, 10)
-var_k = rep(0.6, length(mu_k))
+mu_k = c(-5, 0, 5, 10) # means of the mixture components
+var_k = rep(0.6, length(mu_k)) # variance of the mixture components
 
-weights = matrix(0,10,length(mu_k))
+weights = matrix(0,10,length(mu_k)) # mixture probabilities
 for(i in 1:5){
   weights[2*i-1,] = c(0.5, 0.25, 0.25, 0)
   weights[2*i,] = c(0, 0, 0.4, 0.6)
 }
 
 
-
+## loop that generates the data for the n_datasets replicates
 for(repl in 1:n_datasets) {
   
   for(i in 1:length(n_groups) ){

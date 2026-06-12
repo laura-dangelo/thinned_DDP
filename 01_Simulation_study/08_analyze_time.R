@@ -12,14 +12,12 @@ library(viridis)
 
 n_groups = c(2, 10)
 ssg = c(10, 30)
-n_ss = 4 # number of different configuration of sample size
+n_ss = 4 
 n_datasets = 50
 
 tot_datasets = n_datasets * n_ss * length(n_groups)
 
 time_df = data.frame("Model" = character(), "G" = numeric(), "n" = numeric(), "time" = double())
-
-
 
 for(repl in 1:n_datasets) {
   for(i in 1:length(n_groups) ){
@@ -30,20 +28,15 @@ for(repl in 1:n_datasets) {
       newdata = c("Thinned DDP", n_groups[i], sum(n_groups[i]/2*ssg*j), time_thinnedDDP)
       time_df[nrow(time_df)+1,] = newdata
 
-      
       nameopen = paste0("01_Simulation_study/results/time_CAM", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
       time_CAM = readRDS(nameopen)
       newdata = c("CAM", n_groups[i], sum(n_groups[i]/2*ssg*j), time_CAM)
       time_df[nrow(time_df)+1,] = newdata
       
-      
       nameopen = paste0("01_Simulation_study/results/time_gmDDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
       time_gmDDP = readRDS(nameopen)
       newdata = c("GM-DDP", n_groups[i], sum(n_groups[i]/2*ssg*j), time_gmDDP)
       time_df[nrow(time_df)+1,] = newdata
- 
-      
-      
     }
   }
 }
@@ -66,12 +59,9 @@ ggplot(time_df, aes(x = n, y = log(time), fill=Model ) ) +
   theme(
     panel.background = element_rect(fill='transparent', color=NA), #transparent panel bg
     plot.background = element_rect(fill='transparent', color=NA), #transparent plot bg
-    # panel.grid.major = element_blank(), #remove major gridlines
     panel.grid.minor = element_blank(), #remove minor gridlines
     panel.border = element_rect(color = "darkgray ", fill=NA),
-    # axis.line.y.left = element_line(color="gray"),
     axis.line.x.bottom = element_line(color="gray"),
-    #
     legend.position = "bottom",
     legend.background = element_rect(fill='transparent', color = 'white'), #transparent legend bg
     legend.box.background = element_rect(fill='transparent'), #transparent legend panel
@@ -79,13 +69,11 @@ ggplot(time_df, aes(x = n, y = log(time), fill=Model ) ) +
     strip.text = element_text(size=10),
     strip.background = element_rect( fill=NA, color="gray" )
   )+
-  # scale_fill_manual( values = c(rocket(8)[4], mako(8)[5], inferno(8)[7]) ) +
   scale_fill_manual( values = c("darkgoldenrod1", "cyan4",  "deeppink4") ) +
   xlab("Sample size")  +
   ylab("log(time)")+
   facet_wrap( ~ G, scales = "free",
               labeller = labeller(G = c("2" = "2 groups",
-                                        "10" = "10 groups") )
-  )
+                                        "10" = "10 groups") ) )
 
 ggsave("01_Simulation_study/output_images/08_02_time.pdf", width = 8, height = 4)

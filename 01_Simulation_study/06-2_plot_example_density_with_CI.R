@@ -1,17 +1,34 @@
+#----------------# #----------------# #----------------# #----------------# 
+#                  PLOT CREDIBLE INTERVALS OF THE DENSITY                 #
+#----------------# #----------------# #----------------# #----------------# 
+
+# This script takes as input the point-wise credible intervals of the densities and
+# plots them for the different configurations and models.
+# In particular, it produces Figures F6-F11 of the Supplementary Material.
+
 library(ggplot2)
 
 n_groups = c(2, 10)
 ssg = c(10, 30)
-n_ss = 4 # number of different configuration of sample size
+n_ss = 4 
 n_datasets = 50
 
 tot_datasets = n_datasets * n_ss * length(n_groups)
 
 
+
+#----------------# #----------------# #----------------# #----------------# #----------------# 
+#----------------#                 COMPARISON DIFFERENT MODELS              #----------------# 
+#----------------# #----------------# #----------------# #----------------# #----------------# 
+
+
+#-----# #-----# #-----# #-----# #-----# #-----# #-----# #-----#
+#-----#         TWO GROUPS, MINIMUM SAMPLE SIZE         #-----#         
+#-----# #-----# #-----# #-----# #-----# #-----# #-----# #-----#
+
 repl = 10
 i = 1
 j = 1
-
 
 nameopen = paste0("01_Simulation_study/results/density_CI_thinnedDDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
 density_CI_thinnedDDP = readRDS(nameopen)
@@ -38,12 +55,9 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
   theme(
     panel.background = element_rect(fill='transparent', color=NA), #transparent panel bg
     plot.background = element_rect(fill='transparent', color=NA), #transparent plot bg
-    # panel.grid.major = element_blank(), #remove major gridlines
     panel.grid.minor = element_blank(), #remove minor gridlines
     panel.border = element_rect(color = "darkgray ", fill=NA),
-    # axis.line.y.left = element_line(color="gray"),
     axis.line.x.bottom = element_line(color="gray"),
-    #
     legend.position = "bottom",
     legend.background = element_rect(fill='transparent', color = 'white'), #transparent legend bg
     legend.box.background = element_rect(fill='transparent'), #transparent legend panel
@@ -51,13 +65,10 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
     strip.text = element_text(size=10),
     strip.background = element_rect( fill=NA, color="gray" )
   )+
-  # scale_y_continuous(breaks = c(0.0, 0.1, 0.2,0.3),  limits = c(0,0.3)) +
   xlab("y")  + ylab("Density")+
   facet_wrap( ~reorder(Group, sort(as.numeric(Group))), ncol = 2, dir="h")
 
 ggsave("01_Simulation_study/output_images/06_02_densityCAM_2G_minSS.pdf", width = 8, height = 3.5)
-
-
 
 
 
@@ -75,12 +86,9 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
   theme(
     panel.background = element_rect(fill='transparent', color=NA), #transparent panel bg
     plot.background = element_rect(fill='transparent', color=NA), #transparent plot bg
-    # panel.grid.major = element_blank(), #remove major gridlines
     panel.grid.minor = element_blank(), #remove minor gridlines
     panel.border = element_rect(color = "darkgray ", fill=NA),
-    # axis.line.y.left = element_line(color="gray"),
     axis.line.x.bottom = element_line(color="gray"),
-    #
     legend.position = "bottom",
     legend.background = element_rect(fill='transparent', color = 'white'), #transparent legend bg
     legend.box.background = element_rect(fill='transparent'), #transparent legend panel
@@ -96,7 +104,9 @@ ggsave("01_Simulation_study/output_images/06_02_densityGM_2G_minSS.pdf", width =
 
 
 
-#-----------# #-----------# #-----------# #-----------# #-----------# #-----------# #-----------# 
+#-----# #-----# #-----# #-----# #-----# #-----# #-----# #-----#
+#-----#         TWO GROUPS, MAXIMUM SAMPLE SIZE         #-----#         
+#-----# #-----# #-----# #-----# #-----# #-----# #-----# #-----#
 
 repl = 10
 i = 1
@@ -126,12 +136,9 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
   theme(
     panel.background = element_rect(fill='transparent', color=NA), #transparent panel bg
     plot.background = element_rect(fill='transparent', color=NA), #transparent plot bg
-    # panel.grid.major = element_blank(), #remove major gridlines
     panel.grid.minor = element_blank(), #remove minor gridlines
     panel.border = element_rect(color = "darkgray ", fill=NA),
-    # axis.line.y.left = element_line(color="gray"),
     axis.line.x.bottom = element_line(color="gray"),
-    #
     legend.position = "bottom",
     legend.background = element_rect(fill='transparent', color = 'white'), #transparent legend bg
     legend.box.background = element_rect(fill='transparent'), #transparent legend panel
@@ -139,13 +146,10 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
     strip.text = element_text(size=10),
     strip.background = element_rect( fill=NA, color="gray" )
   )+
-  # scale_y_continuous(breaks = c(0.0, 0.1, 0.2,0.3),  limits = c(0,0.3)) +
   xlab("y")  + ylab("Density")+
   facet_wrap( ~reorder(Group, sort(as.numeric(Group))), ncol = 2, dir="h")
 
 ggsave("01_Simulation_study/output_images/06_02_densityCAM_2G_maxSS.pdf", width = 8, height = 3.5)
-
-
 
 
 
@@ -163,12 +167,9 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
   theme(
     panel.background = element_rect(fill='transparent', color=NA), #transparent panel bg
     plot.background = element_rect(fill='transparent', color=NA), #transparent plot bg
-    # panel.grid.major = element_blank(), #remove major gridlines
     panel.grid.minor = element_blank(), #remove minor gridlines
     panel.border = element_rect(color = "darkgray ", fill=NA),
-    # axis.line.y.left = element_line(color="gray"),
     axis.line.x.bottom = element_line(color="gray"),
-    #
     legend.position = "bottom",
     legend.background = element_rect(fill='transparent', color = 'white'), #transparent legend bg
     legend.box.background = element_rect(fill='transparent'), #transparent legend panel
@@ -183,8 +184,9 @@ ggsave("01_Simulation_study/output_images/06_02_densityGM_2G_maxSS.pdf", width =
 
 
 
-#-----------# #-----------# #-----------# #-----------# #-----------# #-----------# #-----------# 
-
+#-----# #-----# #-----# #-----# #-----# #-----# #-----# #-----#
+#-----#         TEN GROUPS, MINIMUM SAMPLE SIZE         #-----#         
+#-----# #-----# #-----# #-----# #-----# #-----# #-----# #-----#
 
 repl = 10
 i = 2
@@ -214,12 +216,9 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
   theme(
     panel.background = element_rect(fill='transparent', color=NA), #transparent panel bg
     plot.background = element_rect(fill='transparent', color=NA), #transparent plot bg
-    # panel.grid.major = element_blank(), #remove major gridlines
     panel.grid.minor = element_blank(), #remove minor gridlines
     panel.border = element_rect(color = "darkgray ", fill=NA),
-    # axis.line.y.left = element_line(color="gray"),
     axis.line.x.bottom = element_line(color="gray"),
-    #
     legend.position = "bottom",
     legend.background = element_rect(fill='transparent', color = 'white'), #transparent legend bg
     legend.box.background = element_rect(fill='transparent'), #transparent legend panel
@@ -227,7 +226,6 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
     strip.text = element_text(size=10),
     strip.background = element_rect( fill=NA, color="gray" )
   )+
-  # scale_y_continuous(breaks = c(0.0, 0.1, 0.2,0.3),  limits = c(0,0.3)) +
   xlab("y")  + ylab("Density")+
   facet_wrap( ~reorder(Group, sort(as.numeric(Group))), ncol = 2, dir="h")
 
@@ -251,12 +249,9 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
   theme(
     panel.background = element_rect(fill='transparent', color=NA), #transparent panel bg
     plot.background = element_rect(fill='transparent', color=NA), #transparent plot bg
-    # panel.grid.major = element_blank(), #remove major gridlines
     panel.grid.minor = element_blank(), #remove minor gridlines
     panel.border = element_rect(color = "darkgray ", fill=NA),
-    # axis.line.y.left = element_line(color="gray"),
     axis.line.x.bottom = element_line(color="gray"),
-    #
     legend.position = "bottom",
     legend.background = element_rect(fill='transparent', color = 'white'), #transparent legend bg
     legend.box.background = element_rect(fill='transparent'), #transparent legend panel
@@ -272,8 +267,9 @@ ggsave("01_Simulation_study/output_images/06_02_densityGM_10G_minSS.pdf", width 
 
 
 
-#-----------# #-----------# #-----------# #-----------# #-----------# #-----------# #-----------# 
-
+#-----# #-----# #-----# #-----# #-----# #-----# #-----# #-----#
+#-----#         TEN GROUPS, MAXIMUM SAMPLE SIZE         #-----#         
+#-----# #-----# #-----# #-----# #-----# #-----# #-----# #-----#
 
 repl = 10
 i = 2
@@ -303,12 +299,9 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
   theme(
     panel.background = element_rect(fill='transparent', color=NA), #transparent panel bg
     plot.background = element_rect(fill='transparent', color=NA), #transparent plot bg
-    # panel.grid.major = element_blank(), #remove major gridlines
     panel.grid.minor = element_blank(), #remove minor gridlines
     panel.border = element_rect(color = "darkgray ", fill=NA),
-    # axis.line.y.left = element_line(color="gray"),
     axis.line.x.bottom = element_line(color="gray"),
-    #
     legend.position = "bottom",
     legend.background = element_rect(fill='transparent', color = 'white'), #transparent legend bg
     legend.box.background = element_rect(fill='transparent'), #transparent legend panel
@@ -316,7 +309,6 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
     strip.text = element_text(size=10),
     strip.background = element_rect( fill=NA, color="gray" )
   )+
-  # scale_y_continuous(breaks = c(0.0, 0.1, 0.2,0.3),  limits = c(0,0.3)) +
   xlab("y")  + ylab("Density")+
   facet_wrap( ~reorder(Group, sort(as.numeric(Group))), ncol = 2, dir="h")
 
@@ -340,12 +332,9 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
   theme(
     panel.background = element_rect(fill='transparent', color=NA), #transparent panel bg
     plot.background = element_rect(fill='transparent', color=NA), #transparent plot bg
-    # panel.grid.major = element_blank(), #remove major gridlines
     panel.grid.minor = element_blank(), #remove minor gridlines
     panel.border = element_rect(color = "darkgray ", fill=NA),
-    # axis.line.y.left = element_line(color="gray"),
     axis.line.x.bottom = element_line(color="gray"),
-    #
     legend.position = "bottom",
     legend.background = element_rect(fill='transparent', color = 'white'), #transparent legend bg
     legend.box.background = element_rect(fill='transparent'), #transparent legend panel
@@ -362,24 +351,13 @@ ggsave("01_Simulation_study/output_images/06_02_densityGM_10G_maxSS.pdf", width 
 
 
 
+#----------------# #----------------# #----------------# #----------------# #----------------# 
+#----------------#                 COMPARISON POOLING AND NO POOLING        #----------------# 
+#----------------# #----------------# #----------------# #----------------# #----------------# 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-#-----------# #-----------# #-----------# #-----------# #-----------# #-----------# #-----------# 
-#-----------# #-----------# #-----------# #-----------# #-----------# #-----------# #-----------# 
-
-
+#-----# #-----# #-----# #-----# #-----# #-----# #-----# #-----#
+#-----#         TWO GROUPS, MINIMUM SAMPLE SIZE         #-----#         
+#-----# #-----# #-----# #-----# #-----# #-----# #-----# #-----#
 repl = 10
 i = 1
 j = 1
@@ -408,12 +386,9 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
   theme(
     panel.background = element_rect(fill='transparent', color=NA), #transparent panel bg
     plot.background = element_rect(fill='transparent', color=NA), #transparent plot bg
-    # panel.grid.major = element_blank(), #remove major gridlines
     panel.grid.minor = element_blank(), #remove minor gridlines
     panel.border = element_rect(color = "darkgray ", fill=NA),
-    # axis.line.y.left = element_line(color="gray"),
     axis.line.x.bottom = element_line(color="gray"),
-    #
     legend.position = "bottom",
     legend.background = element_rect(fill='transparent', color = 'white'), #transparent legend bg
     legend.box.background = element_rect(fill='transparent'), #transparent legend panel
@@ -421,7 +396,6 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
     strip.text = element_text(size=10),
     strip.background = element_rect( fill=NA, color="gray" )
   )+
-  # scale_y_continuous(breaks = c(0.0, 0.1, 0.2,0.3),  limits = c(0,0.3)) +
   xlab("y")  + ylab("Density")+
   facet_wrap( ~reorder(Group, sort(as.numeric(Group))), ncol = 2, dir="h")
 
@@ -444,12 +418,9 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
   theme(
     panel.background = element_rect(fill='transparent', color=NA), #transparent panel bg
     plot.background = element_rect(fill='transparent', color=NA), #transparent plot bg
-    # panel.grid.major = element_blank(), #remove major gridlines
     panel.grid.minor = element_blank(), #remove minor gridlines
     panel.border = element_rect(color = "darkgray ", fill=NA),
-    # axis.line.y.left = element_line(color="gray"),
     axis.line.x.bottom = element_line(color="gray"),
-    #
     legend.position = "bottom",
     legend.background = element_rect(fill='transparent', color = 'white'), #transparent legend bg
     legend.box.background = element_rect(fill='transparent'), #transparent legend panel
@@ -463,8 +434,9 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
 ggsave("01_Simulation_study/output_images/06_01_densitypool_2G_minSS.pdf", width = 8, height = 3.5)
 
 
-#-----------# #-----------# #-----------# #-----------# #-----------# #-----------# #-----------# 
-
+#-----# #-----# #-----# #-----# #-----# #-----# #-----# #-----#
+#-----#         TWO GROUPS, MAXIMUM SAMPLE SIZE         #-----#         
+#-----# #-----# #-----# #-----# #-----# #-----# #-----# #-----#
 
 repl = 10
 i = 1
@@ -494,12 +466,9 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
   theme(
     panel.background = element_rect(fill='transparent', color=NA), #transparent panel bg
     plot.background = element_rect(fill='transparent', color=NA), #transparent plot bg
-    # panel.grid.major = element_blank(), #remove major gridlines
     panel.grid.minor = element_blank(), #remove minor gridlines
     panel.border = element_rect(color = "darkgray ", fill=NA),
-    # axis.line.y.left = element_line(color="gray"),
     axis.line.x.bottom = element_line(color="gray"),
-    #
     legend.position = "bottom",
     legend.background = element_rect(fill='transparent', color = 'white'), #transparent legend bg
     legend.box.background = element_rect(fill='transparent'), #transparent legend panel
@@ -507,7 +476,6 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
     strip.text = element_text(size=10),
     strip.background = element_rect( fill=NA, color="gray" )
   )+
-  # scale_y_continuous(breaks = c(0.0, 0.1, 0.2,0.3),  limits = c(0,0.3)) +
   xlab("y")  + ylab("Density")+
   facet_wrap( ~reorder(Group, sort(as.numeric(Group))), ncol = 2, dir="h")
 
@@ -530,12 +498,9 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
   theme(
     panel.background = element_rect(fill='transparent', color=NA), #transparent panel bg
     plot.background = element_rect(fill='transparent', color=NA), #transparent plot bg
-    # panel.grid.major = element_blank(), #remove major gridlines
     panel.grid.minor = element_blank(), #remove minor gridlines
     panel.border = element_rect(color = "darkgray ", fill=NA),
-    # axis.line.y.left = element_line(color="gray"),
     axis.line.x.bottom = element_line(color="gray"),
-    #
     legend.position = "bottom",
     legend.background = element_rect(fill='transparent', color = 'white'), #transparent legend bg
     legend.box.background = element_rect(fill='transparent'), #transparent legend panel
@@ -550,9 +515,9 @@ ggsave("01_Simulation_study/output_images/06_01_densitypool_2G_maxSS.pdf", width
 
 
 
-
-#-----------# #-----------# #-----------# #-----------# #-----------# #-----------# #-----------# 
-
+#-----# #-----# #-----# #-----# #-----# #-----# #-----# #-----#
+#-----#         TEN GROUPS, MINIMUM SAMPLE SIZE         #-----#         
+#-----# #-----# #-----# #-----# #-----# #-----# #-----# #-----#
 
 repl = 10
 i = 2
@@ -583,10 +548,8 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
   theme(
     panel.background = element_rect(fill='transparent', color=NA), #transparent panel bg
     plot.background = element_rect(fill='transparent', color=NA), #transparent plot bg
-    # panel.grid.major = element_blank(), #remove major gridlines
     panel.grid.minor = element_blank(), #remove minor gridlines
     panel.border = element_rect(color = "darkgray ", fill=NA),
-    # axis.line.y.left = element_line(color="gray"),
     axis.line.x.bottom = element_line(color="gray"),
     #
     legend.position = "bottom",
@@ -596,12 +559,10 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
     strip.text = element_text(size=10),
     strip.background = element_rect( fill=NA, color="gray" )
   )+
-  # scale_y_continuous(breaks = c(0.0, 0.1, 0.2,0.3),  limits = c(0,0.3)) +
   xlab("y")  + ylab("Density")+
   facet_wrap( ~reorder(Group, sort(as.numeric(Group))), ncol = 2, dir="h")
 
 ggsave("01_Simulation_study/output_images/06_01_densitynopool_10G_minSS.pdf", width = 8, height = 10)
-
 
 
 
@@ -619,12 +580,9 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
   theme(
     panel.background = element_rect(fill='transparent', color=NA), #transparent panel bg
     plot.background = element_rect(fill='transparent', color=NA), #transparent plot bg
-    # panel.grid.major = element_blank(), #remove major gridlines
     panel.grid.minor = element_blank(), #remove minor gridlines
     panel.border = element_rect(color = "darkgray ", fill=NA),
-    # axis.line.y.left = element_line(color="gray"),
     axis.line.x.bottom = element_line(color="gray"),
-    #
     legend.position = "bottom",
     legend.background = element_rect(fill='transparent', color = 'white'), #transparent legend bg
     legend.box.background = element_rect(fill='transparent'), #transparent legend panel
@@ -639,7 +597,9 @@ ggsave("01_Simulation_study/output_images/06_01_densitypool_10G_minSS.pdf", widt
 
 
 
-#-----------# #-----------# #-----------# #-----------# #-----------# #-----------# #-----------# 
+#-----# #-----# #-----# #-----# #-----# #-----# #-----# #-----#
+#-----#         TEN GROUPS, MAXIMUM SAMPLE SIZE         #-----#         
+#-----# #-----# #-----# #-----# #-----# #-----# #-----# #-----#
 
 repl = 10
 i = 2
@@ -670,12 +630,9 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
   theme(
     panel.background = element_rect(fill='transparent', color=NA), #transparent panel bg
     plot.background = element_rect(fill='transparent', color=NA), #transparent plot bg
-    # panel.grid.major = element_blank(), #remove major gridlines
     panel.grid.minor = element_blank(), #remove minor gridlines
     panel.border = element_rect(color = "darkgray ", fill=NA),
-    # axis.line.y.left = element_line(color="gray"),
     axis.line.x.bottom = element_line(color="gray"),
-    #
     legend.position = "bottom",
     legend.background = element_rect(fill='transparent', color = 'white'), #transparent legend bg
     legend.box.background = element_rect(fill='transparent'), #transparent legend panel
@@ -683,7 +640,6 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
     strip.text = element_text(size=10),
     strip.background = element_rect( fill=NA, color="gray" )
   )+
-  # scale_y_continuous(breaks = c(0.0, 0.1, 0.2,0.3),  limits = c(0,0.3)) +
   xlab("y")  + ylab("Density")+
   facet_wrap( ~reorder(Group, sort(as.numeric(Group))), ncol = 2, dir="h")
 
@@ -706,12 +662,9 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
   theme(
     panel.background = element_rect(fill='transparent', color=NA), #transparent panel bg
     plot.background = element_rect(fill='transparent', color=NA), #transparent plot bg
-    # panel.grid.major = element_blank(), #remove major gridlines
     panel.grid.minor = element_blank(), #remove minor gridlines
     panel.border = element_rect(color = "darkgray ", fill=NA),
-    # axis.line.y.left = element_line(color="gray"),
     axis.line.x.bottom = element_line(color="gray"),
-    #
     legend.position = "bottom",
     legend.background = element_rect(fill='transparent', color = 'white'), #transparent legend bg
     legend.box.background = element_rect(fill='transparent'), #transparent legend panel
