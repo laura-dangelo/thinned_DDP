@@ -3,6 +3,7 @@
 // [[Rcpp::export]]
 Rcpp::List sampler_DP_arma(int nrep, // number of replications of the Gibbs sampler
                             int burnin, // number of replications to discard as burn-in
+                            int thinning_factor, // e.g., a thinning factor of 2 saves half of the chains
                             const arma::vec & y, // input data
                             int trunc, // maximum number of clusters (truncation)
                             double mu0, double tau0, // hyperparameters on the N-iG prior on the mean parameter, mu|sigma2 ~ N(mu0, sigma2 / tau0)
@@ -22,10 +23,10 @@ Rcpp::List sampler_DP_arma(int nrep, // number of replications of the Gibbs samp
   int iter_thin = 0 ;
   
   // allocate output matrices
-  arma::mat out_mu(trunc, (nrep-burnin)/2, arma::fill::zeros) ; // cluster-specific means
-  arma::mat out_sigma2(trunc, (nrep-burnin)/2, arma::fill::ones) ; // cluster-specific variances
-  arma::mat out_cl(N, (nrep-burnin)/2) ; // cluster allocation of each observation
-  arma::mat out_pi(trunc, (nrep-burnin)/2, arma::fill::zeros) ; // cluster allocation probabilities (they are group-specific)
+  arma::mat out_mu(trunc, (nrep-burnin)/thinning_factor, arma::fill::zeros) ; // cluster-specific means
+  arma::mat out_sigma2(trunc, (nrep-burnin)/thinning_factor, arma::fill::ones) ; // cluster-specific variances
+  arma::mat out_cl(N, (nrep-burnin)/thinning_factor) ; // cluster allocation of each observation
+  arma::mat out_pi(trunc, (nrep-burnin)/thinning_factor, arma::fill::zeros) ; // cluster allocation probabilities (they are group-specific)
   arma::vec v_j = Rcpp::rbeta(trunc, 1.0, alpha) ; // beta r.v. of stick-breaking
   arma::vec log_m1v_j = log(1.0 - v_j) ;
   
@@ -120,7 +121,7 @@ Rcpp::List sampler_DP_arma(int nrep, // number of replications of the Gibbs samp
       }
     }
     
-    if((iter >= burnin) & (iter % 2 == 0)) {
+    if((iter >= burnin) & (iter % thinning_factor == 0)) {
       out_mu.col(iter_thin) = tmp_mu ;
       out_sigma2.col(iter_thin) = tmp_sigma2 ;
       out_cl.col(iter_thin) = tmp_cl ;

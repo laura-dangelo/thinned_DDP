@@ -10,3 +10,5 @@
 results/
 results_sensitivity/
 data/
+.o
+.so

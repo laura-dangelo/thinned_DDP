@@ -68,13 +68,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // sampler_DP_arma
-Rcpp::List sampler_DP_arma(int nrep, int burnin, const arma::vec& y, int trunc, double mu0, double tau0, double gamma0, double lambda0, double alpha, arma::vec mu_start, arma::vec sigma2_start, arma::vec cl_start, bool progressbar);
-RcppExport SEXP _thinnedDDP_sampler_DP_arma(SEXP nrepSEXP, SEXP burninSEXP, SEXP ySEXP, SEXP truncSEXP, SEXP mu0SEXP, SEXP tau0SEXP, SEXP gamma0SEXP, SEXP lambda0SEXP, SEXP alphaSEXP, SEXP mu_startSEXP, SEXP sigma2_startSEXP, SEXP cl_startSEXP, SEXP progressbarSEXP) {
+Rcpp::List sampler_DP_arma(int nrep, int burnin, int thinning_factor, const arma::vec& y, int trunc, double mu0, double tau0, double gamma0, double lambda0, double alpha, arma::vec mu_start, arma::vec sigma2_start, arma::vec cl_start, bool progressbar);
+RcppExport SEXP _thinnedDDP_sampler_DP_arma(SEXP nrepSEXP, SEXP burninSEXP, SEXP thinning_factorSEXP, SEXP ySEXP, SEXP truncSEXP, SEXP mu0SEXP, SEXP tau0SEXP, SEXP gamma0SEXP, SEXP lambda0SEXP, SEXP alphaSEXP, SEXP mu_startSEXP, SEXP sigma2_startSEXP, SEXP cl_startSEXP, SEXP progressbarSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type nrep(nrepSEXP);
     Rcpp::traits::input_parameter< int >::type burnin(burninSEXP);
+    Rcpp::traits::input_parameter< int >::type thinning_factor(thinning_factorSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type y(ySEXP);
     Rcpp::traits::input_parameter< int >::type trunc(truncSEXP);
     Rcpp::traits::input_parameter< double >::type mu0(mu0SEXP);
@@ -86,18 +87,19 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::vec >::type sigma2_start(sigma2_startSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type cl_start(cl_startSEXP);
     Rcpp::traits::input_parameter< bool >::type progressbar(progressbarSEXP);
-    rcpp_result_gen = Rcpp::wrap(sampler_DP_arma(nrep, burnin, y, trunc, mu0, tau0, gamma0, lambda0, alpha, mu_start, sigma2_start, cl_start, progressbar));
+    rcpp_result_gen = Rcpp::wrap(sampler_DP_arma(nrep, burnin, thinning_factor, y, trunc, mu0, tau0, gamma0, lambda0, alpha, mu_start, sigma2_start, cl_start, progressbar));
     return rcpp_result_gen;
 END_RCPP
 }
 // sampler_thinnedDDP_arma
-Rcpp::List sampler_thinnedDDP_arma(int nrep, int burnin, const arma::vec& y, const arma::vec& group, int trunc, double mu0, double tau0, double gamma0, double lambda0, double alpha, double a_beta, double b_beta, arma::vec mu_start, arma::vec sigma2_start, arma::vec cl_start, bool progressbar);
-RcppExport SEXP _thinnedDDP_sampler_thinnedDDP_arma(SEXP nrepSEXP, SEXP burninSEXP, SEXP ySEXP, SEXP groupSEXP, SEXP truncSEXP, SEXP mu0SEXP, SEXP tau0SEXP, SEXP gamma0SEXP, SEXP lambda0SEXP, SEXP alphaSEXP, SEXP a_betaSEXP, SEXP b_betaSEXP, SEXP mu_startSEXP, SEXP sigma2_startSEXP, SEXP cl_startSEXP, SEXP progressbarSEXP) {
+Rcpp::List sampler_thinnedDDP_arma(int nrep, int burnin, int thinning_factor, const arma::vec& y, const arma::vec& group, int trunc, double mu0, double tau0, double gamma0, double lambda0, double alpha, double a_beta, double b_beta, arma::vec mu_start, arma::vec sigma2_start, arma::vec cl_start, bool progressbar);
+RcppExport SEXP _thinnedDDP_sampler_thinnedDDP_arma(SEXP nrepSEXP, SEXP burninSEXP, SEXP thinning_factorSEXP, SEXP ySEXP, SEXP groupSEXP, SEXP truncSEXP, SEXP mu0SEXP, SEXP tau0SEXP, SEXP gamma0SEXP, SEXP lambda0SEXP, SEXP alphaSEXP, SEXP a_betaSEXP, SEXP b_betaSEXP, SEXP mu_startSEXP, SEXP sigma2_startSEXP, SEXP cl_startSEXP, SEXP progressbarSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< int >::type nrep(nrepSEXP);
     Rcpp::traits::input_parameter< int >::type burnin(burninSEXP);
+    Rcpp::traits::input_parameter< int >::type thinning_factor(thinning_factorSEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type y(ySEXP);
     Rcpp::traits::input_parameter< const arma::vec& >::type group(groupSEXP);
     Rcpp::traits::input_parameter< int >::type trunc(truncSEXP);
@@ -112,7 +114,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< arma::vec >::type sigma2_start(sigma2_startSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type cl_start(cl_startSEXP);
     Rcpp::traits::input_parameter< bool >::type progressbar(progressbarSEXP);
-    rcpp_result_gen = Rcpp::wrap(sampler_thinnedDDP_arma(nrep, burnin, y, group, trunc, mu0, tau0, gamma0, lambda0, alpha, a_beta, b_beta, mu_start, sigma2_start, cl_start, progressbar));
+    rcpp_result_gen = Rcpp::wrap(sampler_thinnedDDP_arma(nrep, burnin, thinning_factor, y, group, trunc, mu0, tau0, gamma0, lambda0, alpha, a_beta, b_beta, mu_start, sigma2_start, cl_start, progressbar));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -122,8 +124,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_thinnedDDP_compute_density", (DL_FUNC) &_thinnedDDP_compute_density, 4},
     {"_thinnedDDP_compute_density_1iter1DP", (DL_FUNC) &_thinnedDDP_compute_density_1iter1DP, 4},
     {"_thinnedDDP_compute_density_1DP", (DL_FUNC) &_thinnedDDP_compute_density_1DP, 4},
-    {"_thinnedDDP_sampler_DP_arma", (DL_FUNC) &_thinnedDDP_sampler_DP_arma, 13},
-    {"_thinnedDDP_sampler_thinnedDDP_arma", (DL_FUNC) &_thinnedDDP_sampler_thinnedDDP_arma, 16},
+    {"_thinnedDDP_sampler_DP_arma", (DL_FUNC) &_thinnedDDP_sampler_DP_arma, 14},
+    {"_thinnedDDP_sampler_thinnedDDP_arma", (DL_FUNC) &_thinnedDDP_sampler_thinnedDDP_arma, 17},
     {NULL, NULL, 0}
 };
 

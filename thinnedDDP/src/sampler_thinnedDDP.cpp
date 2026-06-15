@@ -3,6 +3,7 @@
 // [[Rcpp::export]]
 Rcpp::List sampler_thinnedDDP_arma(int nrep, // number of replications of the Gibbs sampler
                                    int burnin, // number of replications to discard as burn-in
+                                   int thinning_factor, // e.g., a thinning factor of 2 saves half of the chains
                                    const arma::vec & y, // input data
                                    const arma::vec & group, // group assignment for each observation in the vector y
                                    int trunc, // maximum number of clusters (truncation)
@@ -25,15 +26,15 @@ Rcpp::List sampler_thinnedDDP_arma(int nrep, // number of replications of the Gi
   int G = unique_groups.n_elem ;
   
   // allocate output matrices
-  arma::mat out_mu(trunc, (nrep-burnin)/2, arma::fill::zeros) ; // cluster-specific means
-  arma::mat out_sigma2(trunc, (nrep-burnin)/2, arma::fill::ones) ; // cluster-specific variances
-  arma::mat out_cl(N, (nrep-burnin)/2) ; // cluster allocation of each observation
-  arma::cube out_pi(trunc, G, (nrep-burnin)/2, arma::fill::zeros) ; // group-specific cluster allocation probabilities
+  arma::mat out_mu(trunc, (nrep-burnin)/thinning_factor, arma::fill::zeros) ; // cluster-specific means
+  arma::mat out_sigma2(trunc, (nrep-burnin)/thinning_factor, arma::fill::ones) ; // cluster-specific variances
+  arma::mat out_cl(N, (nrep-burnin)/thinning_factor) ; // cluster allocation of each observation
+  arma::cube out_pi(trunc, G, (nrep-burnin)/thinning_factor, arma::fill::zeros) ; // group-specific cluster allocation probabilities
   arma::vec v_j = Rcpp::rbeta(trunc, 1.0, alpha) ; // beta r.v. of stick-breaking
   arma::vec thinned_vj = v_j ;
   arma::vec log_m1v_j = log(1.0 - v_j) ;
-  arma::cube out_ell(trunc, G, (nrep-burnin)/2, arma::fill::ones) ; // thinning variables ell_j
-  arma::mat out_prob_thinning(G, (nrep-burnin)/2, arma::fill::zeros) ; // group-specific thinning probabilities
+  arma::cube out_ell(trunc, G, (nrep-burnin)/thinning_factor, arma::fill::ones) ; // thinning variables ell_j
+  arma::mat out_prob_thinning(G, (nrep-burnin)/thinning_factor, arma::fill::zeros) ; // group-specific thinning probabilities
   
   double p1 ; 
   double log_p1 ; double log_p0 ;
@@ -187,7 +188,7 @@ Rcpp::List sampler_thinnedDDP_arma(int nrep, // number of replications of the Gi
       }
     }
     
-    if((iter >= burnin) & (iter % 2 == 0)) {
+    if((iter >= burnin) & (iter % thinning_factor == 0)) {
       out_mu.col(iter_thin) = tmp_mu ;
       out_sigma2.col(iter_thin) = tmp_sigma2 ;
       out_cl.col(iter_thin) = tmp_cl ;

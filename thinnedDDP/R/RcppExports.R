@@ -17,11 +17,11 @@ compute_density_1DP <- function(grid, weights, means, variances) {
     .Call(`_thinnedDDP_compute_density_1DP`, grid, weights, means, variances)
 }
 
-sampler_DP_arma <- function(nrep, burnin, y, trunc, mu0, tau0, gamma0, lambda0, alpha, mu_start, sigma2_start, cl_start, progressbar) {
-    .Call(`_thinnedDDP_sampler_DP_arma`, nrep, burnin, y, trunc, mu0, tau0, gamma0, lambda0, alpha, mu_start, sigma2_start, cl_start, progressbar)
+sampler_DP_arma <- function(nrep, burnin, thinning_factor, y, trunc, mu0, tau0, gamma0, lambda0, alpha, mu_start, sigma2_start, cl_start, progressbar) {
+    .Call(`_thinnedDDP_sampler_DP_arma`, nrep, burnin, thinning_factor, y, trunc, mu0, tau0, gamma0, lambda0, alpha, mu_start, sigma2_start, cl_start, progressbar)
 }
 
-sampler_thinnedDDP_arma <- function(nrep, burnin, y, group, trunc, mu0, tau0, gamma0, lambda0, alpha, a_beta, b_beta, mu_start, sigma2_start, cl_start, progressbar) {
-    .Call(`_thinnedDDP_sampler_thinnedDDP_arma`, nrep, burnin, y, group, trunc, mu0, tau0, gamma0, lambda0, alpha, a_beta, b_beta, mu_start, sigma2_start, cl_start, progressbar)
+sampler_thinnedDDP_arma <- function(nrep, burnin, thinning_factor, y, group, trunc, mu0, tau0, gamma0, lambda0, alpha, a_beta, b_beta, mu_start, sigma2_start, cl_start, progressbar) {
+    .Call(`_thinnedDDP_sampler_thinnedDDP_arma`, nrep, burnin, thinning_factor, y, group, trunc, mu0, tau0, gamma0, lambda0, alpha, a_beta, b_beta, mu_start, sigma2_start, cl_start, progressbar)
 }
 
