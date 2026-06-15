@@ -98,7 +98,7 @@ ggplot(ess_df, aes(x = n, y = ess, fill=Parameter ) ) +
   )+
   scale_fill_manual( values = c("darkgoldenrod1", "cyan4",  "deeppink4", "turquoise") ) +
   xlab("Sample size")  +
-  ylab("Effective sample size of the MCMC chain")+
+  ylab("Effective sample size")+
   facet_wrap( ~ G, scales = "free",
               labeller = labeller(G = c("2" = "2 groups",
                                         "10" = "10 groups") )
