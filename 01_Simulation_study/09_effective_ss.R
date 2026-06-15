@@ -79,7 +79,8 @@ if(!file.exists("01_Simulation_study/output_RDS/effective_sample_size.RDS")){
   ess_df = readRDS(file = "01_Simulation_study/output_RDS/effective_sample_size.RDS")
 }
 
-ggplot(ess_df, aes(x = n, y = ess, fill=Parameter ) ) +
+ess_df$Quantity = ess_df$Parameter
+ggplot(ess_df, aes(x = n, y = ess, fill=Quantity ) ) +
   geom_boxplot(alpha = 0.6) +
   theme(axis.text.x = element_text(angle = 30, hjust = 1)) +
   theme_minimal() +
