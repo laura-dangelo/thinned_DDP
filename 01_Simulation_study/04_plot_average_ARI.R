@@ -4,6 +4,7 @@
 #----------------# #----------------# #----------------# 
 
 # This script produces Figure 3 and Figure 5 in the article.
+# The script loads the dataframes ARI_df_pool.RDS and ARI_df_models.RDS from the output_RDS folder.
 
 
 library(devtools)

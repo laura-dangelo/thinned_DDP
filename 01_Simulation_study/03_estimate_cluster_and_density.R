@@ -2,11 +2,12 @@
 #             ESTIMATE CLUSTER AND DENSITY             #
 #----------------# #----------------# #----------------# 
 
-# This script takes as input the MCMC runs and estimates the partition and posterior group-specific densities.
+# This script takes as input the MCMC runs and estimates the posterior partition and group-specific densities.
 # The results are then saved into the "01_Simulation_study/results" folder.
 
-# Running this script requires some hours of computing time. 
-# You can avoid running it by downloading the pre-computed estimates (see README).
+# Running this script requires several hours of computing time. 
+# You can avoid running it and produce the graphs starting from the pre-computed
+# dataframes in the output_RDS folder.
 
 
 library(salso)

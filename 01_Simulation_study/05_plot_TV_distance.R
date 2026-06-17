@@ -4,6 +4,8 @@
 #----------------# #----------------# #----------------# 
 
 # This script produces Figure 4 and Figure 6 in the article.
+# The script loads the dataframes TVdist_df_pool.RDS and TVdist_df_models.RDS from the output_RDS folder.
+
 
 library(devtools)
 library(salso)

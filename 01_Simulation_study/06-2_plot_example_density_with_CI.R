@@ -4,7 +4,7 @@
 
 # This script takes as input the point-wise credible intervals of the densities and
 # plots them for the different configurations and models.
-# In particular, it produces Figures F6-F11 of the Supplementary Material.
+# In particular, it produces Figures F6-F13 of the Supplementary Material.
 
 library(ggplot2)
 

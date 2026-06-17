@@ -14,7 +14,8 @@
 # The results are then saved into the "01_Simulation_study/results" folder.
 
 # Running this script requires several hours of computing time. 
-# You can avoid running it by downloading the pre-computed chains (see README).
+# You can avoid running it and produce the graphs starting from the pre-computed
+# dataframes in the output_RDS folder.
 
 library(sanba)
 library(BNPmix)
