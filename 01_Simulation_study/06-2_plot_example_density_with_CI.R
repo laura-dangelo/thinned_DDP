@@ -39,6 +39,9 @@ density_CI_CAM = readRDS(nameopen)
 nameopen = paste0("01_Simulation_study/results/density_CI_gmDDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
 density_CI_gmDDP = readRDS(nameopen)
 
+nameopen = paste0("01_Simulation_study/results/density_CI_HDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
+density_CI_HDP = readRDS(nameopen)
+
 
 cols = c("Thinned DDP"="deeppink4", "CAM"="darkgoldenrod4")
 
@@ -103,6 +106,36 @@ ggsave("01_Simulation_study/output_images/06_02_densityGM_2G_minSS.pdf", width =
 
 
 
+cols2 = c("Thinned DDP"="deeppink4",  "HDP" = "blue")
+ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) + 
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha=0.3, 
+              col = "maroon", fill = "maroon", lwd= 0.3) +
+  geom_ribbon(data = density_CI_HDP, aes(ymin = lower, ymax = upper), alpha=0.3, 
+              col = "blue", fill = "blue", lwd= 0.3) +
+  geom_line(aes(col = "Thinned DDP"), lwd = 1) +
+  geom_line(aes(y = true), lty = "dashed", lwd = 1 ) + 
+  geom_line(data = density_CI_HDP, aes(x = Seq, y=mean, col="HDP") , lwd=1) +
+  scale_colour_manual(name="Model", values = cols2) + 
+  theme_minimal() +
+  theme(
+    panel.background = element_rect(fill='transparent', color=NA), #transparent panel bg
+    plot.background = element_rect(fill='transparent', color=NA), #transparent plot bg
+    panel.grid.minor = element_blank(), #remove minor gridlines
+    panel.border = element_rect(color = "darkgray ", fill=NA),
+    axis.line.x.bottom = element_line(color="gray"),
+    legend.position = "bottom",
+    legend.background = element_rect(fill='transparent', color = 'white'), #transparent legend bg
+    legend.box.background = element_rect(fill='transparent'), #transparent legend panel
+    legend.text = element_text(size=10),
+    strip.text = element_text(size=10),
+    strip.background = element_rect( fill=NA, color="gray" )
+  )+
+  xlab("y")  + ylab("Density")+
+  facet_wrap( ~reorder(Group, sort(as.numeric(Group))), ncol = 2, dir="h")
+
+ggsave("01_Simulation_study/output_images/06_02_densityHDP_2G_minSS.pdf", width = 8, height = 3.5)
+
+
 
 #-----# #-----# #-----# #-----# #-----# #-----# #-----# #-----#
 #-----#         TWO GROUPS, MAXIMUM SAMPLE SIZE         #-----#         
@@ -120,6 +153,9 @@ density_CI_CAM = readRDS(nameopen)
 
 nameopen = paste0("01_Simulation_study/results/density_CI_gmDDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
 density_CI_gmDDP = readRDS(nameopen)
+
+nameopen = paste0("01_Simulation_study/results/density_CI_HDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
+density_CI_HDP = readRDS(nameopen)
 
 cols = c("Thinned DDP"="deeppink4", "CAM"="darkgoldenrod4")
 
@@ -184,6 +220,36 @@ ggsave("01_Simulation_study/output_images/06_02_densityGM_2G_maxSS.pdf", width =
 
 
 
+cols2 = c("Thinned DDP"="deeppink4",  "HDP" = "blue")
+ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) + 
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha=0.3, 
+              col = "maroon", fill = "maroon", lwd= 0.3) +
+  geom_ribbon(data = density_CI_HDP, aes(ymin = lower, ymax = upper), alpha=0.3, 
+              col = "blue", fill = "blue", lwd= 0.3) +
+  geom_line(aes(col = "Thinned DDP"), lwd = 1) +
+  geom_line(aes(y = true), lty = "dashed", lwd = 1 ) + 
+  geom_line(data = density_CI_HDP, aes(x = Seq, y=mean, col="HDP") , lwd=1) +
+  scale_colour_manual(name="Model", values = cols2) + 
+  theme_minimal() +
+  theme(
+    panel.background = element_rect(fill='transparent', color=NA), #transparent panel bg
+    plot.background = element_rect(fill='transparent', color=NA), #transparent plot bg
+    panel.grid.minor = element_blank(), #remove minor gridlines
+    panel.border = element_rect(color = "darkgray ", fill=NA),
+    axis.line.x.bottom = element_line(color="gray"),
+    legend.position = "bottom",
+    legend.background = element_rect(fill='transparent', color = 'white'), #transparent legend bg
+    legend.box.background = element_rect(fill='transparent'), #transparent legend panel
+    legend.text = element_text(size=10),
+    strip.text = element_text(size=10),
+    strip.background = element_rect( fill=NA, color="gray" )
+  )+
+  xlab("y")  + ylab("Density")+
+  facet_wrap( ~reorder(Group, sort(as.numeric(Group))), ncol = 2, dir="h")
+
+ggsave("01_Simulation_study/output_images/06_02_densityHDP_2G_maxSS.pdf", width = 8, height = 3.5)
+
+
 #-----# #-----# #-----# #-----# #-----# #-----# #-----# #-----#
 #-----#         TEN GROUPS, MINIMUM SAMPLE SIZE         #-----#         
 #-----# #-----# #-----# #-----# #-----# #-----# #-----# #-----#
@@ -200,6 +266,9 @@ density_CI_CAM = readRDS(nameopen)
 
 nameopen = paste0("01_Simulation_study/results/density_CI_gmDDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
 density_CI_gmDDP = readRDS(nameopen)
+
+nameopen = paste0("01_Simulation_study/results/density_CI_HDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
+density_CI_HDP = readRDS(nameopen)
 
 cols = c("Thinned DDP"="deeppink4", "CAM"="darkgoldenrod4")
 
@@ -266,6 +335,36 @@ ggsave("01_Simulation_study/output_images/06_02_densityGM_10G_minSS.pdf", width 
 
 
 
+cols2 = c("Thinned DDP"="deeppink4",  "HDP" = "blue")
+ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) + 
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha=0.3, 
+              col = "maroon", fill = "maroon", lwd= 0.3) +
+  geom_ribbon(data = density_CI_HDP, aes(ymin = lower, ymax = upper), alpha=0.3, 
+              col = "blue", fill = "blue", lwd= 0.3) +
+  geom_line(aes(col = "Thinned DDP"), lwd = 1) +
+  geom_line(aes(y = true), lty = "dashed", lwd = 1 ) + 
+  geom_line(data = density_CI_HDP, aes(x = Seq, y=mean, col="HDP") , lwd=1) +
+  scale_colour_manual(name="Model", values = cols2) + 
+  theme_minimal() +
+  theme(
+    panel.background = element_rect(fill='transparent', color=NA), #transparent panel bg
+    plot.background = element_rect(fill='transparent', color=NA), #transparent plot bg
+    panel.grid.minor = element_blank(), #remove minor gridlines
+    panel.border = element_rect(color = "darkgray ", fill=NA),
+    axis.line.x.bottom = element_line(color="gray"),
+    legend.position = "bottom",
+    legend.background = element_rect(fill='transparent', color = 'white'), #transparent legend bg
+    legend.box.background = element_rect(fill='transparent'), #transparent legend panel
+    legend.text = element_text(size=10),
+    strip.text = element_text(size=10),
+    strip.background = element_rect( fill=NA, color="gray" )
+  )+
+  xlab("y")  + ylab("Density")+
+  facet_wrap( ~reorder(Group, sort(as.numeric(Group))), ncol = 2, dir="h")
+
+ggsave("01_Simulation_study/output_images/06_02_densityHDP_10G_minSS.pdf", width = 8, height = 3.5)
+
+
 
 #-----# #-----# #-----# #-----# #-----# #-----# #-----# #-----#
 #-----#         TEN GROUPS, MAXIMUM SAMPLE SIZE         #-----#         
@@ -283,6 +382,9 @@ density_CI_CAM = readRDS(nameopen)
 
 nameopen = paste0("01_Simulation_study/results/density_CI_gmDDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
 density_CI_gmDDP = readRDS(nameopen)
+
+nameopen = paste0("01_Simulation_study/results/density_CI_HDP", n_groups[i], "groups_", sum(n_groups[i]/2*ssg*j), "n_", repl,".RDS")
+density_CI_HDP = readRDS(nameopen)
 
 cols = c("Thinned DDP"="deeppink4", "CAM"="darkgoldenrod4")
 
@@ -347,6 +449,36 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
 
 ggsave("01_Simulation_study/output_images/06_02_densityGM_10G_maxSS.pdf", width = 8, height = 10)
 
+
+
+cols2 = c("Thinned DDP"="deeppink4",  "HDP" = "blue")
+ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) + 
+  geom_ribbon(aes(ymin = lower, ymax = upper), alpha=0.3, 
+              col = "maroon", fill = "maroon", lwd= 0.3) +
+  geom_ribbon(data = density_CI_HDP, aes(ymin = lower, ymax = upper), alpha=0.3, 
+              col = "blue", fill = "blue", lwd= 0.3) +
+  geom_line(aes(col = "Thinned DDP"), lwd = 1) +
+  geom_line(aes(y = true), lty = "dashed", lwd = 1 ) + 
+  geom_line(data = density_CI_HDP, aes(x = Seq, y=mean, col="HDP") , lwd=1) +
+  scale_colour_manual(name="Model", values = cols2) + 
+  theme_minimal() +
+  theme(
+    panel.background = element_rect(fill='transparent', color=NA), #transparent panel bg
+    plot.background = element_rect(fill='transparent', color=NA), #transparent plot bg
+    panel.grid.minor = element_blank(), #remove minor gridlines
+    panel.border = element_rect(color = "darkgray ", fill=NA),
+    axis.line.x.bottom = element_line(color="gray"),
+    legend.position = "bottom",
+    legend.background = element_rect(fill='transparent', color = 'white'), #transparent legend bg
+    legend.box.background = element_rect(fill='transparent'), #transparent legend panel
+    legend.text = element_text(size=10),
+    strip.text = element_text(size=10),
+    strip.background = element_rect( fill=NA, color="gray" )
+  )+
+  xlab("y")  + ylab("Density")+
+  facet_wrap( ~reorder(Group, sort(as.numeric(Group))), ncol = 2, dir="h")
+
+ggsave("01_Simulation_study/output_images/06_02_densityHDP_10G_maxSS.pdf", width = 8, height = 3.5)
 
 
 
