@@ -27,3 +27,12 @@ You can install the package `thinned_DDP` for running the Gibbs sampler from Git
 # install.packages("devtools")
 devtools::install_github("laura-dangelo/thinned_DDP", subdir='thinnedDDP')
 ```
+
+## Executing the Gibbs sampler
+The main function is `thinnedDDP::sampler_thinnedDDP`, which fits the thinned-DDP via a Gibbs sampler algorithm. 
+The function takes as input the number of MCMC iterations, the number of iterations to discard as burnin, the vector of the data and the corresponding group allocation.
+
+``` r
+run_gibbs_thinnedDDP = thinnedDDP::sampler_thinnedDDP(nrep, burnin,
+                                                      y, group)
+```
