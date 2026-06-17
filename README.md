@@ -21,3 +21,9 @@ Main structure:
 Large files (typically, outputs of the Gibbs sampler algorithm and extracted quantities) are excluded from the repository and are available in the Google Drive [folder](https://drive.google.com/drive/folders/1VVzDpo1fLS5QG8ByCHO6oXbZSlVjNahu?usp=sharing). The name of each subfolder corresponds to the path of the files in the repository. Note that these files are not necessary to produce the plots in the article, which can be obtained starting from the RDS files available in the folders named `output_RDS`.  
 
 
+## Installation
+You can install the package `thinned_DDP` for running the Gibbs sampler from GitHub with:
+``` r
+# install.packages("devtools")
+devtools::install_github("laura-dangelo/thinned_DDP", subdir='thinnedDDP')
+```
