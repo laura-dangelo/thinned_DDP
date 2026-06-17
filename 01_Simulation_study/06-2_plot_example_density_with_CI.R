@@ -362,7 +362,7 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
   xlab("y")  + ylab("Density")+
   facet_wrap( ~reorder(Group, sort(as.numeric(Group))), ncol = 2, dir="h")
 
-ggsave("01_Simulation_study/output_images/06_02_densityHDP_10G_minSS.pdf", width = 8, height = 3.5)
+ggsave("01_Simulation_study/output_images/06_02_densityHDP_10G_minSS.pdf", width = 8, height = 10)
 
 
 
@@ -478,7 +478,7 @@ ggplot(data = density_CI_thinnedDDP, aes(x = Seq, y = mean)) +
   xlab("y")  + ylab("Density")+
   facet_wrap( ~reorder(Group, sort(as.numeric(Group))), ncol = 2, dir="h")
 
-ggsave("01_Simulation_study/output_images/06_02_densityHDP_10G_maxSS.pdf", width = 8, height = 3.5)
+ggsave("01_Simulation_study/output_images/06_02_densityHDP_10G_maxSS.pdf", width = 8, height = 10)
 
 
 
