@@ -7,8 +7,9 @@
 .Rproj.user/*
 /.Rproj.user
 .Rhistory*
-results/
-results_sensitivity/
+results/*.RDS
+results_sensitivity/*.RDS
 data/
 .o
 .so
+*.Rhistory
