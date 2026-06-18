@@ -57,142 +57,47 @@ sampler_thinnedDDP(
 ## Required Inputs
 
 #### `y`
-
 Numeric vector containing the observed data.
 
-```r
-y <- c(1.2, 0.5, -0.7, 2.1, ...)
-```
-
 Requirements:
-
 * numeric vector;
 * length `N`;
 * no missing values (`NA`).
 
 ---
 
-### `group`
-
+#### `group` 
 Vector indicating the group membership of each observation.
 
-```r
-group <- c(0, 0, 0, 1, 1, 2, ...)
-```
-
 Requirements:
-
 * same length as `y`;
 * one group label for each observation;
-* groups must be coded as consecutive integers starting from `0`:
-
-```r
-0, 1, 2, ..., G - 1
-```
-
-Example:
-
-```r
-group <- c(
-  0, 0, 0, 0,
-  1, 1, 1,
-  2, 2, 2, 2
-)
-```
+* groups must be coded as consecutive integers starting from `0`: `(0, 1, 2, ..., G - 1)`, where `G` is the number of groups.
 
 If your groups are stored as factors:
-
 ```r
 group <- as.numeric(factor(group)) - 1
 ```
 
 ---
 
-### `nrep`
-
-Total number of MCMC iterations.
-
-```r
-nrep = 10000
-```
-
-Requirements:
-
-* positive integer;
-* must satisfy:
-
-```r
-nrep > burnin
-```
+#### `nrep`
+Total number of MCMC iterations (positive integer). 
 
 ---
 
-### `burnin`
-
-Number of initial iterations discarded as burn-in.
-
-```r
-burnin = 2000
-```
-
-Requirements:
-
-* non-negative integer;
-* must satisfy:
-
-```r
-burnin < nrep
-```
+#### `burnin`
+Number of initial iterations discarded as burn-in (must satisfy `burnin < nrep`).
 
 ---
 
-### `mu_start`
-
-Initial values of the cluster means.
-
-```r
-mu_start <- rnorm(trunc)
-```
-
-Requirements:
-
-* numeric vector;
-* length equal to `trunc`.
+#### `mu_start`, `sigma2_start`
+Initial values of the cluster means and variances. Numeric vectors of length `trunc` (truncation level of the DP - default is `trunc = 50`). For `sigma2_start`, all entries must be positive.
 
 ---
 
-### `sigma2_start`
-
-Initial values of the cluster variances.
-
-```r
-sigma2_start <- rep(1, trunc)
-```
-
-Requirements:
-
-* numeric vector;
-* length equal to `trunc`;
-* all entries must be strictly positive.
-
----
-
-### `cl_start`
-
-Initial cluster allocation for each observation.
-
-```r
-cl_start <- sample(0:(trunc - 1), length(y), replace = TRUE)
-```
-
-Requirements:
-
-* length equal to `length(y)`;
-* cluster labels must be integers in:
-
-```r
-0, 1, ..., trunc - 1
-```
+#### `cl_start`
+Initial cluster allocation for each observation. Numeric vector of length equal to `length(y)`. Cluster labels must be integers in `0, 1, ..., trunc - 1`.
 
 ---
 
