@@ -19,3 +19,5 @@ thinnedDDP/.Rbuildignore
 thinnedDDP/src/*.o
 thinnedDDP/src/*.so
 density_*
+/01_Simulation_study/results
+/02_Application/results
