@@ -29,7 +29,7 @@ devtools::install_github("laura-dangelo/thinned_DDP", subdir='thinnedDDP')
 ```
 
 ## Usage
-The function `sampler_thinnedDDP()` implements a blocked Gibbs sampler for a thinned Dependent Dirichlet Process (thinned-DDP) mixture model for grouped data.
+The function `sampler_thinnedDDP()` implements a blocked Gibbs sampler for a thinned-DDP Gaussian mixture model for grouped data.
 ```r
 sampler_thinnedDDP(
   nrep,
@@ -112,7 +112,7 @@ cl_start <- sample(
 | `thinning_factor` | `2`     | Store one draw every `thinning_factor` MCMC iterations.                                          | Integer ≥ 1       |
 | `trunc`           | `50`    | Truncation level of the stick-breaking representation (maximum number of mixture components).    | Integer > 0       |
 | `m0`              | `0`     | Prior mean for cluster means.                                                                    | —                 |
-| `tau0`            | `0.1`   | Prior precision parameter in (\mu_j \mid \sigma_j^2 \sim N(m_0,\sigma_j^2/\tau_0)).              | `tau0 > 0`        |
+| `tau0`            | `0.1`   | Prior precision parameter                                                                        | `tau0 > 0`        |
 | `gamma0`          | `3`     | Shape parameter of the inverse-Gamma prior on cluster variances.                                 | `gamma0 > 0`      |
 | `lambda0`         | `2`     | Rate parameter of the inverse-Gamma prior on cluster variances.                                  | `lambda0 > 0`     |
 | `alpha`           | `1`     | Dirichlet Process concentration parameter. Larger values typically favor more occupied clusters. | `alpha > 0`       |
@@ -120,23 +120,6 @@ cl_start <- sample(
 | `b_beta`          | `1`     | Second shape parameter of the Beta prior on group-specific thinning probabilities.               | `b_beta > 0`      |
 | `progressbar`     | `TRUE`  | Display a progress bar during MCMC execution.                                                    | `TRUE` or `FALSE` |
 
-### Prior Specification
-
-The sampler uses the following prior distributions:
-
-[
-\mu_j \mid \sigma_j^2 \sim N\left(m_0,\frac{\sigma_j^2}{\tau_0}\right)
-]
-
-[
-1/\sigma_j^2 \sim \mathrm{Gamma}(\gamma_0,\lambda_0)
-]
-
-[
-p_g \sim \mathrm{Beta}(a_\beta,b_\beta)
-]
-
-where (p_g) denotes the group-specific thinning probability.
 
 ### Example
 
