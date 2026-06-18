@@ -9,7 +9,7 @@
 .Rhistory*
 results/*.RDS
 results_sensitivity/*.RDS
-data/
+/01_Simulation_study/data/
 .o
 .so
 *.Rhistory

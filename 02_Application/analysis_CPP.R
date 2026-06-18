@@ -32,12 +32,13 @@ tau0 = 0.01
 gam0 = 2.5
 lam0 = (gam0-1)
 
-nrep = 30000
-burnin = (floor(nrep/2))
+nrep = 110000
+burnin = 10000
 
 if(!file.exists("02_Application/results/run_CPP.RDS")) {
   run_gibbs_CPP = thinnedDDP::sampler_thinnedDDP(nrep = nrep,
                                                  burnin = burnin,
+                                                 thinning_factor = 40,
                                                  y = CPP$gest,
                                                  group = CPP$hosp-1,
                                                  trunc = trunc,
