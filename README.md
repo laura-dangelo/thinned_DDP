@@ -28,11 +28,417 @@ You can install the package `thinned_DDP` for running the Gibbs sampler from Git
 devtools::install_github("laura-dangelo/thinned_DDP", subdir='thinnedDDP')
 ```
 
-## Executing the Gibbs sampler
-The main function is `thinnedDDP::sampler_thinnedDDP`, which fits the thinned-DDP via a Gibbs sampler algorithm. 
-The function takes as input the number of MCMC iterations, the number of iterations to discard as burnin, the vector of the data and the corresponding group allocation.
-
-``` r
-run_gibbs_thinnedDDP = thinnedDDP::sampler_thinnedDDP(nrep, burnin,
-                                                      y, group)
+## Usage
+The function `sampler_thinnedDDP()` implements a blocked Gibbs sampler for a thinned Dependent Dirichlet Process (thinned-DDP) mixture model for grouped data.
+```r
+sampler_thinnedDDP(
+  nrep,
+  burnin,
+  thinning_factor = 2,
+  y,
+  group,
+  trunc = 50,
+  m0 = 0,
+  tau0 = 0.1,
+  gamma0 = 3,
+  lambda0 = 2,
+  alpha = 1,
+  a_beta = 1,
+  b_beta = 1,
+  mu_start,
+  sigma2_start,
+  cl_start,
+  progressbar = TRUE
+)
 ```
+
+---
+
+## Required Inputs
+<ul>
+  <li>`y` : Numeric vector containing the observed data. 
+    * numeric vector;
+    * length `N`;
+    * no missing values (`NA`). </li>
+  <li>Second item</li>
+  <li>Third item</li>
+  <li>Fourth item</li>
+</ul> 
+
+- 
+
+
+
+---
+
+### `group`
+
+Vector indicating the group membership of each observation.
+
+```r
+group <- c(0, 0, 0, 1, 1, 2, ...)
+```
+
+Requirements:
+
+* same length as `y`;
+* one group label for each observation;
+* groups must be coded as consecutive integers starting from `0`:
+
+```r
+0, 1, 2, ..., G - 1
+```
+
+Example:
+
+```r
+group <- c(
+  0, 0, 0, 0,
+  1, 1, 1,
+  2, 2, 2, 2
+)
+```
+
+If your groups are stored as factors:
+
+```r
+group <- as.numeric(factor(group)) - 1
+```
+
+---
+
+### `nrep`
+
+Total number of MCMC iterations.
+
+```r
+nrep = 10000
+```
+
+Requirements:
+
+* positive integer;
+* must satisfy:
+
+```r
+nrep > burnin
+```
+
+---
+
+### `burnin`
+
+Number of initial iterations discarded as burn-in.
+
+```r
+burnin = 2000
+```
+
+Requirements:
+
+* non-negative integer;
+* must satisfy:
+
+```r
+burnin < nrep
+```
+
+---
+
+### `mu_start`
+
+Initial values of the cluster means.
+
+```r
+mu_start <- rnorm(trunc)
+```
+
+Requirements:
+
+* numeric vector;
+* length equal to `trunc`.
+
+---
+
+### `sigma2_start`
+
+Initial values of the cluster variances.
+
+```r
+sigma2_start <- rep(1, trunc)
+```
+
+Requirements:
+
+* numeric vector;
+* length equal to `trunc`;
+* all entries must be strictly positive.
+
+---
+
+### `cl_start`
+
+Initial cluster allocation for each observation.
+
+```r
+cl_start <- sample(0:(trunc - 1), length(y), replace = TRUE)
+```
+
+Requirements:
+
+* length equal to `length(y)`;
+* cluster labels must be integers in:
+
+```r
+0, 1, ..., trunc - 1
+```
+
+---
+
+## Optional Inputs
+
+### `thinning_factor`
+
+Controls how often MCMC draws are stored.
+
+```r
+thinning_factor = 2
+```
+
+Examples:
+
+| Value | Stored draws           |
+| ----- | ---------------------- |
+| 1     | Every iteration        |
+| 2     | Every second iteration |
+| 5     | Every fifth iteration  |
+
+Requirements:
+
+```r
+thinning_factor >= 1
+```
+
+---
+
+### `trunc`
+
+Truncation level of the stick-breaking representation.
+
+```r
+trunc = 50
+```
+
+Requirements:
+
+* positive integer;
+* should be large enough so that posterior mass does not accumulate at the largest cluster index.
+
+---
+
+### Prior Hyperparameters
+
+#### Mean prior
+
+The model assumes
+
+[
+\mu_j \mid \sigma_j^2 \sim N\left(m_0,\frac{\sigma_j^2}{\tau_0}\right)
+]
+
+Parameters:
+
+```r
+m0
+tau0
+```
+
+Defaults:
+
+```r
+m0 = 0
+tau0 = 0.1
+```
+
+Requirement:
+
+```r
+tau0 > 0
+```
+
+---
+
+#### Variance prior
+
+The model assumes
+
+[
+1/\sigma_j^2 \sim \text{Gamma}(\gamma_0,\lambda_0)
+]
+
+Parameters:
+
+```r
+gamma0
+lambda0
+```
+
+Defaults:
+
+```r
+gamma0 = 3
+lambda0 = 2
+```
+
+Requirements:
+
+```r
+gamma0 > 0
+lambda0 > 0
+```
+
+---
+
+#### DP concentration parameter
+
+```r
+alpha = 1
+```
+
+Requirement:
+
+```r
+alpha > 0
+```
+
+Larger values generally encourage a larger number of occupied clusters.
+
+---
+
+#### Thinning probability prior
+
+For each group-specific thinning probability,
+
+[
+p_g \sim \text{Beta}(a_\beta,b_\beta)
+]
+
+Parameters:
+
+```r
+a_beta
+b_beta
+```
+
+Defaults:
+
+```r
+a_beta = 1
+b_beta = 1
+```
+
+Requirements:
+
+```r
+a_beta > 0
+b_beta > 0
+```
+
+---
+
+### `progressbar`
+
+Logical value controlling whether a progress bar is displayed.
+
+```r
+progressbar = TRUE
+```
+
+---
+
+## Example
+
+```r
+set.seed(123)
+
+N <- 200
+G <- 3
+
+group <- rep(0:(G - 1), length.out = N)
+
+y <- c(
+  rnorm(70, -2, 1),
+  rnorm(70, 0, 1),
+  rnorm(60, 3, 1)
+)
+
+trunc <- 20
+
+fit <- sampler_thinnedDDP(
+  nrep = 5000,
+  burnin = 1000,
+  thinning_factor = 5,
+  y = y,
+  group = group,
+  trunc = trunc,
+  mu_start = rnorm(trunc),
+  sigma2_start = rep(1, trunc),
+  cl_start = sample(0:(trunc - 1), N, replace = TRUE)
+)
+```
+
+---
+
+## Output
+
+The function returns a list containing:
+
+| Object          | Description                                              |
+| --------------- | -------------------------------------------------------- |
+| `mu`            | Posterior draws of cluster means                         |
+| `sigma2`        | Posterior draws of cluster variances                     |
+| `cl`            | Posterior draws of cluster allocations                   |
+| `pi`            | Group-specific mixture weights                           |
+| `ell`           | Group-specific thinning indicators                       |
+| `thinning_prob` | Posterior draws of group-specific thinning probabilities |
+| `y`             | Original data vector                                     |
+| `group`         | Group membership vector                                  |
+| `time`          | Total execution time                                     |
+| `hyperpar`      | Prior hyperparameters                                    |
+| `alpha`         | DP concentration parameter                               |
+
+---
+
+## Important Notes
+
+1. Group labels must be coded as
+
+```r
+0, 1, ..., G - 1
+```
+
+with no gaps.
+
+2. Cluster labels in `cl_start` must be coded as
+
+```r
+0, 1, ..., trunc - 1
+```
+
+3. Input dimensions must satisfy:
+
+```r
+length(y) == length(group)
+length(cl_start) == length(y)
+
+length(mu_start) == trunc
+length(sigma2_start) == trunc
+```
+
+4. The number of saved posterior samples is approximately
+
+```r
+(nrep - burnin) / thinning_factor
+```
+
+depending on the burn-in and thinning configuration.
