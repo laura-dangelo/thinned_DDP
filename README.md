@@ -54,213 +54,89 @@ sampler_thinnedDDP(
 
 ---
 
-## Required Inputs
+### Required Inputs
 
-#### `y`
-Numeric vector containing the observed data.
+| Parameter      | Description                                        | Requirements                                                                       |
+| -------------- | -------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| `y`            | Vector of observations.                            | Numeric vector of length `N`; no missing values.                                   |
+| `group`        | Group membership associated with each observation. | Same length as `y`; groups must be coded as consecutive integers `0, 1, ..., G-1`. |
+| `nrep`         | Total number of MCMC iterations.                   | Integer > 0 and `nrep > burnin`.                                                   |
+| `burnin`       | Number of initial iterations discarded as burn-in. | Integer ≥ 0 and `burnin < nrep`.                                                   |
+| `mu_start`     | Initial values of cluster means.                   | Numeric vector of length `trunc`.                                                  |
+| `sigma2_start` | Initial values of cluster variances.               | Positive numeric vector of length `trunc`.                                         |
+| `cl_start`     | Initial cluster allocation for each observation.   | Integer vector of length `N`; values must belong to `{0, ..., trunc-1}`.           |
 
-Requirements:
-* numeric vector;
-* length `N`;
-* no missing values (`NA`).
+#### Input Dimensions
 
----
+The following conditions must hold:
 
-#### `group` 
-Vector indicating the group membership of each observation.
+```r
+length(y) == length(group)
+length(cl_start) == length(y)
 
-Requirements:
-* same length as `y`;
-* one group label for each observation;
-* groups must be coded as consecutive integers starting from `0`: `(0, 1, 2, ..., G - 1)`, where `G` is the number of groups.
+length(mu_start) == trunc
+length(sigma2_start) == trunc
+```
 
-If your groups are stored as factors:
+#### Group Coding
+
+Group labels must be coded as consecutive integers starting from zero: e.g.,
+
+```r
+group <- c(0, 0, 0, 1, 1, 2, 2)
+```
+
+If the groups are stored as factors or character labels, convert them before calling the sampler:
+
 ```r
 group <- as.numeric(factor(group)) - 1
 ```
 
----
+#### Cluster Initialization
 
-#### `nrep`
-Total number of MCMC iterations (positive integer). 
-
----
-
-#### `burnin`
-Number of initial iterations discarded as burn-in (must satisfy `burnin < nrep`).
-
----
-
-#### `mu_start`, `sigma2_start`
-Initial values of the cluster means and variances. Numeric vectors of length `trunc` (truncation level of the DP - default is `trunc = 50`). For `sigma2_start`, all entries must be positive.
-
----
-
-#### `cl_start`
-Initial cluster allocation for each observation. Numeric vector of length equal to `length(y)`. Cluster labels must be integers in `0, 1, ..., trunc - 1`.
-
----
-
-## Optional Inputs
-
-### `thinning_factor`
-
-Controls how often MCMC draws are stored.
+Initial cluster allocations must be integers between `0` and `trunc - 1`:
 
 ```r
-thinning_factor = 2
+cl_start <- sample(
+  0:(trunc - 1),
+  length(y),
+  replace = TRUE
+)
 ```
 
-Examples:
 
-| Value | Stored draws           |
-| ----- | ---------------------- |
-| 1     | Every iteration        |
-| 2     | Every second iteration |
-| 5     | Every fifth iteration  |
+### Optional Parameters
 
-Requirements:
+| Parameter         | Default | Description                                                                                      | Constraints       |
+| ----------------- | ------- | ------------------------------------------------------------------------------------------------ | ----------------- |
+| `thinning_factor` | `2`     | Store one draw every `thinning_factor` MCMC iterations.                                          | Integer ≥ 1       |
+| `trunc`           | `50`    | Truncation level of the stick-breaking representation (maximum number of mixture components).    | Integer > 0       |
+| `m0`              | `0`     | Prior mean for cluster means.                                                                    | —                 |
+| `tau0`            | `0.1`   | Prior precision parameter in (\mu_j \mid \sigma_j^2 \sim N(m_0,\sigma_j^2/\tau_0)).              | `tau0 > 0`        |
+| `gamma0`          | `3`     | Shape parameter of the inverse-Gamma prior on cluster variances.                                 | `gamma0 > 0`      |
+| `lambda0`         | `2`     | Rate parameter of the inverse-Gamma prior on cluster variances.                                  | `lambda0 > 0`     |
+| `alpha`           | `1`     | Dirichlet Process concentration parameter. Larger values typically favor more occupied clusters. | `alpha > 0`       |
+| `a_beta`          | `1`     | First shape parameter of the Beta prior on group-specific thinning probabilities.                | `a_beta > 0`      |
+| `b_beta`          | `1`     | Second shape parameter of the Beta prior on group-specific thinning probabilities.               | `b_beta > 0`      |
+| `progressbar`     | `TRUE`  | Display a progress bar during MCMC execution.                                                    | `TRUE` or `FALSE` |
 
-```r
-thinning_factor >= 1
-```
+### Prior Specification
 
----
-
-### `trunc`
-
-Truncation level of the stick-breaking representation.
-
-```r
-trunc = 50
-```
-
-Requirements:
-
-* positive integer;
-* should be large enough so that posterior mass does not accumulate at the largest cluster index.
-
----
-
-### Prior Hyperparameters
-
-#### Mean prior
-
-The model assumes
+The sampler uses the following prior distributions:
 
 [
 \mu_j \mid \sigma_j^2 \sim N\left(m_0,\frac{\sigma_j^2}{\tau_0}\right)
 ]
 
-Parameters:
-
-```r
-m0
-tau0
-```
-
-Defaults:
-
-```r
-m0 = 0
-tau0 = 0.1
-```
-
-Requirement:
-
-```r
-tau0 > 0
-```
-
----
-
-#### Variance prior
-
-The model assumes
-
 [
-1/\sigma_j^2 \sim \text{Gamma}(\gamma_0,\lambda_0)
+1/\sigma_j^2 \sim \mathrm{Gamma}(\gamma_0,\lambda_0)
 ]
 
-Parameters:
-
-```r
-gamma0
-lambda0
-```
-
-Defaults:
-
-```r
-gamma0 = 3
-lambda0 = 2
-```
-
-Requirements:
-
-```r
-gamma0 > 0
-lambda0 > 0
-```
-
----
-
-#### DP concentration parameter
-
-```r
-alpha = 1
-```
-
-Requirement:
-
-```r
-alpha > 0
-```
-
-Larger values generally encourage a larger number of occupied clusters.
-
----
-
-#### Thinning probability prior
-
-For each group-specific thinning probability,
-
 [
-p_g \sim \text{Beta}(a_\beta,b_\beta)
+p_g \sim \mathrm{Beta}(a_\beta,b_\beta)
 ]
 
-Parameters:
-
-```r
-a_beta
-b_beta
-```
-
-Defaults:
-
-```r
-a_beta = 1
-b_beta = 1
-```
-
-Requirements:
-
-```r
-a_beta > 0
-b_beta > 0
-```
-
----
-
-### `progressbar`
-
-Logical value controlling whether a progress bar is displayed.
-
-```r
-progressbar = TRUE
-```
-
----
+where (p_g) denotes the group-specific thinning probability.
 
 ## Example
 
