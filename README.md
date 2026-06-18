@@ -55,19 +55,20 @@ sampler_thinnedDDP(
 ---
 
 ## Required Inputs
-<ul>
-  <li>`y` : Numeric vector containing the observed data. 
-    * numeric vector;
-    * length `N`;
-    * no missing values (`NA`). </li>
-  <li>Second item</li>
-  <li>Third item</li>
-  <li>Fourth item</li>
-</ul> 
 
-- 
+#### `y`
 
+Numeric vector containing the observed data.
 
+```r
+y <- c(1.2, 0.5, -0.7, 2.1, ...)
+```
+
+Requirements:
+
+* numeric vector;
+* length `N`;
+* no missing values (`NA`).
 
 ---
 
