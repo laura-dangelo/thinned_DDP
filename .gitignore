@@ -18,3 +18,4 @@ thinnedDDP/.Rproj.user
 thinnedDDP/.Rbuildignore
 thinnedDDP/src/*.o
 thinnedDDP/src/*.so
+density_*
