@@ -22,7 +22,7 @@ Large files (typically, outputs of the Gibbs sampler algorithm and extracted qua
 
 
 ## Installation
-You can install the package `thinned_DDP` for running the Gibbs sampler from GitHub with:
+You can install the package `thinnedDDP` for running the Gibbs sampler from GitHub with:
 ``` r
 # install.packages("devtools")
 devtools::install_github("laura-dangelo/thinned_DDP", subdir='thinnedDDP')
