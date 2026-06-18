@@ -13,3 +13,8 @@ data/
 .o
 .so
 *.Rhistory
+thinnedDDP/.Rhistory
+thinnedDDP/.Rproj.user
+thinnedDDP/.Rbuildignore
+thinnedDDP/src/*.o
+thinnedDDP/src/*.so
