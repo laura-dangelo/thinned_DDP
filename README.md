@@ -138,23 +138,24 @@ p_g \sim \mathrm{Beta}(a_\beta,b_\beta)
 
 where (p_g) denotes the group-specific thinning probability.
 
-## Example
+### Example
 
 ```r
+library(thinnedDDP)
 set.seed(123)
 
-N <- 200
+N <- 300
 G <- 3
 
-group <- rep(0:(G - 1), length.out = N)
+group <- sort(rep(0:(G - 1), length.out = N))
 
 y <- c(
-  rnorm(70, -2, 1),
-  rnorm(70, 0, 1),
-  rnorm(60, 3, 1)
+  rnorm(50, -2, 0.6), rnorm(50, 0, 0.6),
+  rnorm(30, 0, 0.6), rnorm(70, 3, 0.6),
+  rnorm(60, 3, 0.6), rnorm(40, 5, 0.6)
 )
 
-trunc <- 20
+trunc <- 30
 
 fit <- sampler_thinnedDDP(
   nrep = 5000,
@@ -167,11 +168,12 @@ fit <- sampler_thinnedDDP(
   sigma2_start = rep(1, trunc),
   cl_start = sample(0:(trunc - 1), N, replace = TRUE)
 )
+str(fit)
 ```
 
 ---
 
-## Output
+### Output
 
 The function returns a list containing:
 
@@ -191,36 +193,3 @@ The function returns a list containing:
 
 ---
 
-## Important Notes
-
-1. Group labels must be coded as
-
-```r
-0, 1, ..., G - 1
-```
-
-with no gaps.
-
-2. Cluster labels in `cl_start` must be coded as
-
-```r
-0, 1, ..., trunc - 1
-```
-
-3. Input dimensions must satisfy:
-
-```r
-length(y) == length(group)
-length(cl_start) == length(y)
-
-length(mu_start) == trunc
-length(sigma2_start) == trunc
-```
-
-4. The number of saved posterior samples is approximately
-
-```r
-(nrep - burnin) / thinning_factor
-```
-
-depending on the burn-in and thinning configuration.
