@@ -29,13 +29,14 @@ sigma2_start[1:length(unique(cl_start))] = sigma2_start[1:length(unique(cl_start
 sigma2_start[is.na(sigma2_start)] = var(CPP$gest)/3
 
 tau0 = 0.01
-gam0 = 2.5
+gam0 = 3
 lam0 = (gam0-1)
 
-nrep = 110000
-burnin = 10000
+nrep = 120000
+burnin = 20000
 
 if(!file.exists("02_Application/results/run_CPP.RDS")) {
+  set.seed(1234)
   run_gibbs_CPP = thinnedDDP::sampler_thinnedDDP(nrep = nrep,
                                                  burnin = burnin,
                                                  thinning_factor = 40,
@@ -70,7 +71,7 @@ for(j in 2:4) { lines(run_gibbs_CPP$mu[,j], col=j) }
 
 #-----# Estimate partition of observations #-----# 
 if(!file.exists("02_Application/results/est_cl_CPP.RDS")){
-  cl_point_est_CPP = salso::salso((run_gibbs_CPP$cl+1), nCores = 3 )
+  cl_point_est_CPP = salso::salso((run_gibbs_CPP$cl+1), nCores = 3, loss=VI(a=1.05) )
   namesave = paste0("02_Application/results/est_cl_CPP.RDS")
   saveRDS(cl_point_est_CPP, file = namesave)
 } else {
@@ -136,29 +137,32 @@ if(!file.exists(namesave)){
 namemat = paste0("02_Application/results/mat_hosp.RDS")
 if(!file.exists(namemat)){
   mat_hosp = matrix(0, 12, 12)
-  for(iter in 1:7500) {
+  for(iter in 1:2500) {
     for(g1 in 1:12) {
       for(g2 in 1:g1) {
         cl1 = sort(unique(run_gibbs_CPP$cl[iter, run_gibbs_CPP$group==(g1-1)]))
         cl2 =  sort(unique(run_gibbs_CPP$cl[iter, run_gibbs_CPP$group==(g2-1)]))
-        if( length(c(setdiff(cl1,cl2),setdiff(cl2,cl1)))<3 ) {
+        if( length(c(setdiff(cl1,cl2),setdiff(cl2,cl1)))==0 ) {
           mat_hosp[g1,g2] = mat_hosp[g1,g2] + 1
           mat_hosp[g2,g1] = mat_hosp[g1,g2] }
       }
     }
   }
-  mat_hosp = mat_hosp/7500
   saveRDS(mat_hosp, namemat)
 } else {
   mat_hosp = readRDS(namemat)
 }
 
+diag(mat_hosp) =1
+mat_hosp = mat_hosp / max(mat_hosp)
+diag(mat_hosp) =1
 
 library(mcclust.ext)
 minVI(mat_hosp)$cl
 which(minVI(mat_hosp)$cl == 1)
 which(minVI(mat_hosp)$cl == 2)
 
+salso::salso(mat_hosp)
 
 # matrix TV distance
 TV_distance = function(seq, dens1, dens2) {
@@ -166,7 +170,7 @@ TV_distance = function(seq, dens1, dens2) {
 }
 
 mat_hospTV = matrix(0, 12, 12)
-for(iter in 1:7500) {
+for(iter in 1:2500) {
   for(g1 in 1:12) {
     for(g2 in 1:g1) {
       mat_hospTV[g1,g2] =  mat_hospTV[g1,g2] + TV_distance(seqq, density_est_CPP$density_mcmc[,g1,iter],
@@ -175,7 +179,15 @@ for(iter in 1:7500) {
     }
   }
 }
-mat_hospTV = mat_hospTV/7500
+mat_hospTV = mat_hospTV/2500
+
+tmp = mat_hospTV
+tmp = tmp/max(tmp)
+diag(tmp) = 1
+
+minVI(tmp)$cl
+which(minVI(tmp)$cl == 1)
+which(minVI(tmp)$cl == 2)
 
 row.names(mat_hospTV) = factor(1:12)
 colnames(mat_hospTV) = factor(1:12)
