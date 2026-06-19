@@ -14,6 +14,7 @@ Main structure:
 - `02_Application` : folder that contains the script and outputs of the real data analysis;   
 - `03_Sensitivity_study` : folder that contains the scripts and outputs of the sensitivity study;  
 - `thinnedDDP` : R package implementing the Gibbs sampler.   
+- `thinnedDDP_0.1.tar.gz` : source file of the R package.  
 - `thinnedDDP_project` : R project to be used as main directory for running the code.  
 
 
