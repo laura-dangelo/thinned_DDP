@@ -5,7 +5,7 @@ library(cowplot)
 library(TeachingDemos)
 
 
-load("02_Application/CPP.Rdata")
+load("02_Application/Data/CPP.Rdata")
 str(CPP)
 
 summary(CPP$gest)
