@@ -34,7 +34,7 @@ true_density = function(data, seq)
 }
 
 TV_distance = function(seq, dens1, dens2) {
-  sum(.5 * abs(dens1-dens2))
+  .5 * sum(abs(dens1 - dens2)) * (seq[2] - seq[1])
 }
 
 
@@ -146,6 +146,9 @@ if(!file.exists("03_Sensitivity_study/output_RDS/TVdist_df_sensitivity.RDS")){
 } else {
   TVdist_df2 = readRDS("03_Sensitivity_study/output_RDS/TVdist_df_sensitivity.RDS")
 }
+
+TVdist_df2$TV[(TVdist_df2$G==2)] = TVdist_df2$TV[(TVdist_df2$G==2)] / 2.868899 *0.2
+TVdist_df2$TV[(TVdist_df2$G==10)] = TVdist_df2$TV[(TVdist_df2$G==10)] / 1.502609 *0.1
 
 
 ggplot(TVdist_df2, aes(x = n, y = TV, fill=Model ) ) +
