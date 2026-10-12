@@ -166,7 +166,7 @@ salso::salso(mat_hosp)
 
 # matrix TV distance
 TV_distance = function(seq, dens1, dens2) {
-  sum(.5 * abs(dens1-dens2))
+  .5 * sum(abs(dens1 - dens2)) * (seq[2] - seq[1])
 }
 
 mat_hospTV = matrix(0, 12, 12)
