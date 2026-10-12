@@ -1,12 +1,12 @@
 Package: thinnedDDP
 Type: Package
-Title: Fit the thinned dependent Dirichlet process via blocked Gibbs sampler
+Title: Fit the thinned-DDP Gaussian mixture model via blocked Gibbs sampler
 Version: 0.1
 Date: 2026-05-21
 Author: Laura D'Angelo
 Maintainer: Laura D'Angelo <laura.dangelo@unimib.it>
 Description: The package implements the blocked Gibbs sampler for fitting the thinned dependent Dirichlet process (thinned-DDP) of D'Angelo, Nipoti and Ongaro (2026, https://arxiv.org/abs/2506.18223) to grouped data.
-License:  MIT 
+License: MIT + file LICENSE 
 Imports: Rcpp
 LinkingTo: Rcpp, RcppArmadillo, RcppProgress
 RoxygenNote: 7.3.2
