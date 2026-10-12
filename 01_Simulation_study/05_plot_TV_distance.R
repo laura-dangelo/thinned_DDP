@@ -37,9 +37,8 @@ true_density = function(data, seq)
 }
 
 TV_distance = function(seq, dens1, dens2) {
-  sum(.5 * abs(dens1-dens2))
+  .5 * sum(abs(dens1 - dens2)) * (seq[2] - seq[1])
 }
-
 
 #-----------#  COMPARE TV DISTANCE WITH COMPLETE AND NO-POOLING MODELS  #-----------#
 
